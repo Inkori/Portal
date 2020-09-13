@@ -1,10 +1,9 @@
 import {Injectable} from '@angular/core';
 import {Environment} from '../../environments/environment';
 import {HttpClient, HttpParams} from '@angular/common/http';
-import {Device, Devices} from '../models/device';
+import {Device} from '../models/device';
 import {Observable, Subject} from 'rxjs';
-import {ParamRequest} from '../models/common';
-import {map} from 'rxjs/operators';
+import {Page, ParamRequest} from '../models/common';
 
 @Injectable({
   providedIn: 'root'
@@ -17,9 +16,9 @@ export class DeviceProfileService {
     this.url = Environment.portalUrl + '/device-profile-service/lcp/apis/v1/devices';
   }
 
-  getDevicesFromApi(request: ParamRequest): Observable<Devices> {
+  getDevicesFromApi(request: ParamRequest): Observable<Page<Device>> {
     const params = this.getHttpParams(request);
-    return this.http.get<Devices>(this.url, {params});
+    return this.http.get<Page<Device>>(this.url, {params});
   }
 
   reloadDevicesForCurrentOrg(): void {

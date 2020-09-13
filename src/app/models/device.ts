@@ -1,13 +1,3 @@
-import {Page} from './common';
-
-export class Devices implements Page<Device> {
-  readonly content: Device[];
-  readonly number: number;
-  readonly size: number;
-  readonly totalElements: number;
-  readonly totalPages: number;
-}
-
 export class Device {
   orgDeviceId: string;
   deviceId: string;
