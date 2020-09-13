@@ -1,0 +1,25 @@
+<div *ngIf="isSubscriptionSelected; else subscription">
+  <p *ngIf="!isRealmSelected">Please select an organization</p>
+  <div [ngClass]="{'little': isRealmSelected}">
+
+    <button mat-button class="btn" *ngIf="isRealmSelected" (click)="reloadPage()">
+      <span>Reload</span>
+    </button>
+
+    <button mat-button class="btn left" [matMenuTriggerFor]="realms">
+      <span>{{ currentRealm ? currentRealm : 'Select an organization' }}</span>
+    </button>
+
+    <mat-menu #realms="matMenu">
+      <button mat-menu-item
+              *ngFor="let item of realmList"
+              (click)="setCurrentRealm(item)"
+              routerLinkActive="list-item-active">
+        <span>{{ item.name }}</span>
+      </button>
+    </mat-menu>
+  </div>
+</div>
+<ng-template #subscription>
+  Please select a subscription
+</ng-template>

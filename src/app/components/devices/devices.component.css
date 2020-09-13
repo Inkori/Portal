@@ -1,0 +1,9 @@
+.hide{
+  visibility: hidden;
+}
+
+.spinner-center{
+  position: absolute;
+  left: 50%;
+  top: 200px;
+}

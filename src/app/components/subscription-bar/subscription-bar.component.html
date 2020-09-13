@@ -1,0 +1,59 @@
+<div class="top">
+  <mat-toolbar class="header">
+    <div fxShow="true">
+      <button mat-icon-button (click)="sidenav.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+    </div>
+
+    <a mat-button class="companyName" routerLink="/">
+      <span>LCP Home</span>
+    </a>
+    <span class="spacer"></span>
+
+    <button mat-icon-button [matMenuTriggerFor]="auth">
+      <mat-icon>person_outline</mat-icon>
+    </button>
+    <mat-menu #auth="matMenu">
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>exit_to_app</mat-icon>
+        <span>Logout</span>
+      </button>
+    </mat-menu>
+
+  </mat-toolbar>
+  <mat-sidenav-container fxFlexFill>
+    <mat-sidenav #sidenav fxLayout="column" #sidenav mode="over" opened="false">
+      <mat-nav-list>
+        <a mat-list-item [matMenuTriggerFor]="sub">
+          <mat-icon>subscriptions</mat-icon>
+          <span>{{ currentSubscription ? currentSubscription.name : 'Subscription' }}</span>
+        </a>
+        <mat-menu #sub="matMenu">
+          <a *ngFor="let item of subscriptions"
+             mat-list-item class="pointer"
+             (click)="setSubscription(item)"
+             routerLinkActive="list-item-active">
+            <!--            <mat-icon matListIcon> subscriptions </mat-icon>-->
+            {{ item.name }}
+          </a>
+        </mat-menu>
+
+        <a *ngFor="let item of myRoutes"
+           mat-list-item
+           (click)="sidenav.close()"
+           [routerLink]="[item.path]"
+           routerLinkActive="list-item-active">
+          <mat-icon matListIcon> {{ item.data.ico }} </mat-icon>
+          {{ item.data.title }}
+        </a>
+
+      </mat-nav-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+
+  </mat-sidenav-container>
+</div>

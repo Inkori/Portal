@@ -1,0 +1,71 @@
+
+.companyName {
+  font-size: 150%;
+}
+
+.mat-toolbar {
+  height: 60px;
+}
+
+div {
+  overflow: inherit;
+}
+
+.mat-sidenav-container {
+  min-height: 93vh !important;
+  /*width: 200px;*/
+}
+
+a {
+  text-decoration: none;
+  font-size: 110%;
+  white-space: normal;
+  margin: 5px;
+  text-align: center;
+}
+
+button {
+  font-size: 110%;
+  min-width: min-content;
+}
+
+.icon {
+  padding: 0 14px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.mat-sidenav-content {
+  font-size: 200%;
+  text-align: center;
+}
+
+.list-item-active {
+  background-color: #b3b3b3;
+}
+
+.top {
+/*todo fix header*/
+}
+
+.header {
+  background-color: #211b19;
+  color: white;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 16px;
+  overflow: hidden;
+  transition: 0.3s;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.dropbox {
+  margin-left: 60px;
+  background-color: red;
+}

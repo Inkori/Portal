@@ -1,0 +1,49 @@
+<app-realm-selection></app-realm-selection>
+
+<div class="mat-elevation-z8">
+<div class="spinner-container spinner-center" *ngIf="loading">
+  <mat-spinner></mat-spinner>
+</div>
+<!--  Use hide instead of *ngIf because element will not be load after subscription swich-->
+  <mat-table class="mat-elevation-z8" [ngClass]="{hide:!isRealmSelected || loading}" [dataSource]="dataSource">
+    <ng-container matColumnDef="status">
+      <mat-header-cell *matHeaderCellDef>Device status</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.deviceState.status}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="deviceDisplayName">
+      <mat-header-cell *matHeaderCellDef>Device name</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.deviceName}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="deviceSerialnumber">
+      <mat-header-cell *matHeaderCellDef>Serial number</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.deviceSerialnumber}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="groups">
+      <mat-header-cell *matHeaderCellDef>Groups</mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <table>
+          <tr *ngFor="let group of row.groups">
+            <td>{{ group.groupName }}</td>
+          </tr>
+        </table>
+      </mat-cell>
+    </ng-container>
+
+
+    <mat-header-row *matHeaderRowDef=displayedColumns></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+<!--    <div [ngClass]="{hide:!isRealmSelected || loading ||  }">This organisation doesn't have any device</div>-->
+
+  </mat-table>
+  <mat-paginator [ngClass]="{hide:!isRealmSelected || loading}"
+                 [pageSize]="paramRequest.pageSize"
+                 [pageSizeOptions]="[5, 10, 20]"
+                 [length]="dataSource.getDevices().totalElements"
+                 [pageIndex]="dataSource.getDevices().number"
+                 showFirstLastButtons>
+  </mat-paginator>
+
+
