@@ -1,0 +1,35 @@
+<div class="modal">
+  <div class="type-select" *ngIf="!registrationType">
+    <h2 mat-dialog-title>Select registration type</h2>
+    <button class="mat-raised-button" (click)="registrationTypeChange('Auto')">Auto</button>
+    <button class="mat-raised-button" (click)="registrationTypeChange('Manual')">Manual</button>
+  </div>
+
+  <form *ngIf="registrationType" [formGroup]="form" (submit)="submit()">
+    <h2 mat-dialog-title>{{ registrationType }} registration</h2>
+
+    <div class="add-form" *ngFor="let prop of addDeviceProps">
+      <mat-form-field class="wide">
+        <mat-label>{{ prop.label }}</mat-label>
+        <input [type]="prop.type" matInput formControlName="{{ prop.key }}">
+      </mat-form-field>
+
+      <div>
+        <div class="danger-alert"
+             *ngIf="form.get(prop.key).errors && form.get(prop.key).errors.required && form.get(prop.key).touched">
+          This field is required
+        </div>
+        <div class="danger-alert"
+             *ngIf="form.get(prop.key).errors && form.get(prop.key).errors.pattern && form.get(prop.key).touched">
+          {{ prop.errorMessages.regex }}
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <mat-dialog-actions class="footer-block">
+    <button class="mat-raised-button" (click)="close()">Close</button>
+    <button *ngIf="registrationType" class="mat-raised-button" (click)="registrationTypeChange('')">Back</button>
+    <button *ngIf="registrationType" [disabled]="form.invalid" class="mat-raised-button mat-primary" (click)="submit()">Add device</button>
+  </mat-dialog-actions>
+</div>

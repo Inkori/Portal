@@ -5,3 +5,14 @@ body {
   position: relative;
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.alert-danger {
+  background-color: #f80250;
+  color: #211b19;
+  font-weight: bold;
+}
+.alert-success {
+  background-color: #7ed777;
+  color: #211b19;
+  font-weight: bold;
+}

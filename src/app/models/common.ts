@@ -1,5 +1,3 @@
-import {Observable} from 'rxjs';
-
 export interface Page<T> {
   readonly number: number;
   readonly size: number;
@@ -13,11 +11,24 @@ export interface ParamRequest {
   pageSize?: number;
   sortByProperty?: string;
   sortByDirection?: string;
+  freeText?: string;
 }
 
-export interface Sort<T> {
-  property: keyof T;
-  order: 'asc' | 'desc';
+export interface AddDeviceManual {
+  deviceName?: string;
+  deviceSerialnumber: string;
 }
 
-export type PaginationEndpoint<T> = (req: ParamRequest) => Observable<Page<T>>;
+export interface AddDeviceClaim {
+  device_name?: string;
+  mt: string;
+  sn: string;
+  token: string;
+}
+
+export interface AddDeviceModalRequest {
+  form: any;
+  regType: string;
+}
+
+

@@ -1,10 +1,9 @@
-import {Component, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AccountManagementService} from '../../services/account-management.service';
 import {AuthService} from '../../services/auth.service';
 import {Organization} from '../../models/organizations';
 import {DeviceProfileService} from '../../services/device-profile.service';
 import {Subscription} from 'rxjs';
-import {defaultDeviceParamRequest} from '../../common/constants';
 
 @Component({
   selector: 'app-realm-selection',
@@ -32,8 +31,11 @@ export class RealmSelectionComponent implements OnInit, OnDestroy {
     if (this.isRealmSelected) {
       this.currentRealm = this.accManagement.getCurrentRealm().name;
     }
-    this.subscriptions.add(this.accManagement.currentRealmList$.subscribe(data => {
-      this.realmList = data;
+    this.subscriptions.add(this.accManagement.orgListUpdateEvent$.subscribe(data => {
+      this.subscriptions.add(this.accManagement.getRealmsFromApi(data).subscribe(response => {
+        this.realmList = response;
+        this.accManagement.setRealmsInOrg(response);
+      }));
     }));
     this.subscriptions.add(this.accManagement.currentSubscription$.subscribe(data => {
       this.isSubscriptionSelected = !!data;

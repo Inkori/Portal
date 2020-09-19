@@ -29,6 +29,11 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatInputModule} from '@angular/material/input';
 import {MatSortModule} from '@angular/material/sort';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {MatDialogModule} from '@angular/material/dialog';
+import {AddDeviceModalComponent} from './components/modals/add-device-modal/add-device-modal.component';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 
 @NgModule({
@@ -42,6 +47,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     ErrorPageComponent,
     SubscriptionBarComponent,
     RealmSelectionComponent,
+    AddDeviceModalComponent,
   ],
   imports: [
     HttpClientModule,
@@ -62,13 +68,19 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     MatPaginatorModule,
     MatInputModule,
     MatSortModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatButtonToggleModule,
+    MatDialogModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatSnackBarModule
   ],
   providers: [
     {provide: APP_INITIALIZER, useFactory: initializer, multi: true, deps: [KeycloakService]},
     {provide: HTTP_INTERCEPTORS, useClass: SubscriptionInterceptor, multi: true},
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [AddDeviceModalComponent]
 })
 export class AppModule {
 }

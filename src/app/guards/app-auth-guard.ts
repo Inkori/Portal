@@ -9,7 +9,7 @@ export class AppAuthGuard extends KeycloakAuthGuard {
   }
 
   public async isAccessAllowed(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
-    if (!this.authenticated) {
+    if (!this.authenticated || this.keycloakAngular.isTokenExpired()) {
       await this.keycloakAngular.login({
         redirectUri: window.location.origin + state.url,
       });

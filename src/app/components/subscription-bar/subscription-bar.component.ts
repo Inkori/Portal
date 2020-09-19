@@ -4,8 +4,6 @@ import {routes} from '../../app-routing.module';
 import {Routes} from '@angular/router';
 import {Subscription} from '../../models/subscription';
 import {subscriptionIds} from '../../../environments/environment';
-import {SUBSCRIPTION_ID} from '../../common/constants';
-import {AuthService} from '../../services/auth.service';
 import {AccountManagementService} from '../../services/account-management.service';
 
 @Component({
@@ -32,7 +30,7 @@ export class SubscriptionBarComponent implements OnInit {
 
   setSubscription(subscription: Subscription) {
     this.accManagement.setSubscription(subscription);
-    this.accManagement.getRealmsFromApi(subscription);
+    this.accManagement.sendOrgUpdateEvent(subscription);
     this.currentSubscription = subscription;
   }
 }

@@ -7,3 +7,22 @@
   left: 50%;
   top: 200px;
 }
+
+.little {
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 1px;
+  height: 40px;
+  /*width: 70px;*/
+}
+
+.activated:hover{
+  cursor: pointer;
+  color: #2593dc;
+}
+
+.mat-column-selectDevice{
+  flex: none;
+  width: 50px;
+  /*background-color: red;*/
+}

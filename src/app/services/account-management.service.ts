@@ -5,7 +5,7 @@ import {ORG_REALMS, REALM, SUBSCRIPTION_ID} from '../common/constants';
 import {Subscription} from '../models/subscription';
 import {Organization} from '../models/organizations';
 import {map} from 'rxjs/operators';
-import {Subject} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -14,25 +14,24 @@ export class AccountManagementService {
   private url: string;
   currentSubscription$ = new Subject<Subscription>();
   currentRealm$ = new Subject<Organization>();
-  currentRealmList$ = new Subject<Organization[]>();
+  orgListUpdateEvent$ = new Subject<Subscription>();
 
   constructor(private http: HttpClient) {
     this.url = Environment.portalUrl + '/lcp-account-management/apis/v1/organizations';
   }
 
-  public getRealmsFromApi(subscription: Subscription): void {
+  public getRealmsFromApi(subscription: Subscription): Observable<Organization[]> {
     const params = new HttpParams().set(SUBSCRIPTION_ID, subscription.id);
     this.removeCurrentRealm();
 
-    const apiCall = this.http.get(this.url, {params})
+    return this.http.get<Organization[]>(this.url, {params})
       .pipe(
         map(json => json['_embedded']),
-        map(embedded => embedded['organizationList']))
-      .subscribe((response) => {
-        this.setRealmsInOrg(response);
-        this.currentRealmList$.next(response);
-        apiCall.unsubscribe();
-      });
+        map(embedded => embedded['organizationList']));
+  }
+
+  sendOrgUpdateEvent(subscription: Subscription) {
+     this.orgListUpdateEvent$.next(subscription);
   }
 
   public setSubscription(subscription: Subscription) {
