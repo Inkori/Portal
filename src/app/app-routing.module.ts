@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
 import {DeviceGroupsComponent} from './components/device-groups/device-groups.component';
 import {HomePageComponent} from './components/home-page/home-page.component';
 import {DeviceRegistryComponent} from './components/device-registry/device-registry.component';

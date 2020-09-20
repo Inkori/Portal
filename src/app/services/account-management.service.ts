@@ -20,7 +20,7 @@ export class AccountManagementService {
     this.url = Environment.portalUrl + '/lcp-account-management/apis/v1/organizations';
   }
 
-  public getRealmsFromApi(subscription: Subscription): Observable<Organization[]> {
+  getRealmsFromApi(subscription: Subscription): Observable<Organization[]> {
     const params = new HttpParams().set(SUBSCRIPTION_ID, subscription.id);
     this.removeCurrentRealm();
 
@@ -34,44 +34,43 @@ export class AccountManagementService {
      this.orgListUpdateEvent$.next(subscription);
   }
 
-  public setSubscription(subscription: Subscription) {
+  setSubscription(subscription: Subscription) {
     localStorage.setItem(SUBSCRIPTION_ID, JSON.stringify(subscription));
     this.currentSubscription$.next(subscription);
   }
 
-  public getSubscription(): Subscription {
+  getSubscription(): Subscription {
     return JSON.parse(localStorage.getItem(SUBSCRIPTION_ID));
   }
 
-  public setRealmsInOrg(realms) {
+  setRealmsInOrg(realms) {
     localStorage.setItem(ORG_REALMS, JSON.stringify(realms));
   }
 
-  public getRealmsInOrg(): Organization[] {
+  getRealmsInOrg(): Organization[] {
     return JSON.parse(localStorage.getItem(ORG_REALMS));
   }
 
-  public setCurrentRealm(realm: Organization) {
+  setCurrentRealm(realm: Organization) {
     localStorage.setItem(REALM, JSON.stringify(realm));
     this.currentRealm$.next(realm);
   }
 
-  public removeCurrentRealm() {
-    localStorage.removeItem(REALM);
-    this.currentRealm$.next(null);
-  }
-
-  public getCurrentRealm(): Organization {
+  getCurrentRealm(): Organization {
     return JSON.parse(localStorage.getItem(REALM));
   }
 
-  public isRealmSelected(): boolean {
+  isRealmSelected(): boolean {
     return !!localStorage.getItem(REALM);
   }
 
-
   isSubscriptionSelected() {
     return !!this.getSubscription();
+  }
+
+  private removeCurrentRealm() {
+    localStorage.removeItem(REALM);
+    this.currentRealm$.next(null);
   }
 }
 

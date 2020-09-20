@@ -3,7 +3,8 @@ import {AccountManagementService} from '../../services/account-management.servic
 import {AuthService} from '../../services/auth.service';
 import {Organization} from '../../models/organizations';
 import {DeviceProfileService} from '../../services/device-profile.service';
-import {Subscription} from 'rxjs';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'app-realm-selection',
@@ -11,8 +12,7 @@ import {Subscription} from 'rxjs';
   styleUrls: ['./realm-selection.component.css']
 })
 export class RealmSelectionComponent implements OnInit, OnDestroy {
-
-  subscriptions: Subscription = new Subscription();
+  private readonly subscriptions$ = new Subject<void>();
   realmList: Organization[];
   isRealmSelected: boolean;
   isSubscriptionSelected: boolean;
@@ -31,25 +31,26 @@ export class RealmSelectionComponent implements OnInit, OnDestroy {
     if (this.isRealmSelected) {
       this.currentRealm = this.accManagement.getCurrentRealm().name;
     }
-    this.subscriptions.add(this.accManagement.orgListUpdateEvent$.subscribe(data => {
-      this.subscriptions.add(this.accManagement.getRealmsFromApi(data).subscribe(response => {
+    this.accManagement.orgListUpdateEvent$.pipe( takeUntil(this.subscriptions$) ).subscribe(data => {
+      this.accManagement.getRealmsFromApi(data).pipe( takeUntil(this.subscriptions$) ).subscribe(response => {
         this.realmList = response;
         this.accManagement.setRealmsInOrg(response);
-      }));
-    }));
-    this.subscriptions.add(this.accManagement.currentSubscription$.subscribe(data => {
+      });
+    });
+    this.accManagement.currentSubscription$.pipe( takeUntil(this.subscriptions$) ).subscribe(data => {
       this.isSubscriptionSelected = !!data;
-    }));
-    this.subscriptions.add(this.accManagement.currentRealm$.subscribe(data => {
+    });
+    this.accManagement.currentRealm$.pipe( takeUntil(this.subscriptions$) ).subscribe(data => {
       this.isRealmSelected = !!data;
       if (!!!data) {
         this.currentRealm = null;
       }
-    }));
+    });
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
+    this.subscriptions$.next();
+    this.subscriptions$.complete();
   }
 
   setCurrentRealm(realm: Organization): void {

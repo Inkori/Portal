@@ -29,21 +29,21 @@ export class DeviceProfileService {
     return this.http.post(this.url + '/bulk-delete', ids);
   }
 
-  getHttpParams(request: ParamRequest): HttpParams {
-    const {pageNumber, pageSize, sortByProperty, sortByDirection, freeText} = request;
-    return new HttpParams()
-      .set('page', `${pageNumber}`)
-      .set('size', `${pageSize}`)
-      .set('sort', `${sortByProperty},${sortByDirection}`)
-      .set('freeText', `${freeText}`);
-  }
-
   addDeviceManually(params: AddDeviceManual[]): Observable<Blob> {
     return this.http.post(this.url + '/batch', params, {responseType: 'blob'});
   }
 
   addDeviceClaim(params: AddDeviceClaim): Observable<any> {
     return this.http.post(this.url + '/activation/claim', params);
+  }
+
+  private getHttpParams(request: ParamRequest): HttpParams {
+    const {pageNumber, pageSize, sortByProperty, sortByDirection, freeText} = request;
+    return new HttpParams()
+      .set('page', `${pageNumber}`)
+      .set('size', `${pageSize}`)
+      .set('sort', `${sortByProperty},${sortByDirection}`)
+      .set('freeText', `${freeText}`);
   }
 }
 

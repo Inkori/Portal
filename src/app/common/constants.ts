@@ -31,5 +31,6 @@ export const DEVICE_DELETE_ERROR_MESSAGE = 'Can\'t delete device. Error: ';
 export const DEVICE_DELETE_MESSAGE = 'Selected devices have been deleted';
 
 // param request
-export const DEFAULT_DEVICE_PARAM_REQUEST: ParamRequest = {
-  pageNumber: 0, pageSize: 7, sortByProperty: 'deviceName', sortByDirection: ASC, freeText: ''};
+export const DEFAULT_DEVICE_PARAM_REQUEST: ParamRequest = Object.freeze({
+  pageNumber: 0, pageSize: 7, sortByProperty: 'deviceName', sortByDirection: ASC, freeText: ''
+});

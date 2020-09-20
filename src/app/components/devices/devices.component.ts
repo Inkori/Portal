@@ -1,6 +1,6 @@
 import {Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewChildren} from '@angular/core';
 import {AccountManagementService} from '../../services/account-management.service';
-import {Subscription} from 'rxjs';
+import {Subject} from 'rxjs';
 import {DeviceProfileService} from '../../services/device-profile.service';
 import {Device} from '../../models/device';
 import {saveAs} from 'file-saver';
@@ -15,12 +15,13 @@ import {
   DEVICE_DELETE_ERROR_MESSAGE,
   DEVICE_DELETE_MESSAGE
 } from '../../common/constants';
-import {DeviceDataSource} from '../../services/device-data-source';
+import {DeviceDataSource} from '../data-source/device-data-source';
 import {AddDeviceModalRequest, Page, ParamRequest} from '../../models/common';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {AddDeviceModalComponent} from '../modals/add-device-modal/add-device-modal.component';
 import {AlertService} from '../../services/alert.service';
 import {HttpErrorResponse} from '@angular/common/http';
+import {takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'app-devices',
@@ -28,7 +29,7 @@ import {HttpErrorResponse} from '@angular/common/http';
   styleUrls: ['./devices.component.css']
 })
 export class DevicesComponent implements OnInit, OnDestroy {
-  subscriptions: Subscription = new Subscription();
+  private readonly subscriptions$ = new Subject<void>();
   isRealmSelected: boolean;
   dataSource: DeviceDataSource<Page<Device>>;
   loading: boolean;
@@ -53,39 +54,37 @@ export class DevicesComponent implements OnInit, OnDestroy {
     this.isRealmSelected = this.accManagement.isRealmSelected();
     this.dataSource = new DeviceDataSource(this.deviceProfileService);
     this.loadDevices();
-    this.subscriptions.add(this.accManagement.currentRealm$.subscribe(data => {
+    this.accManagement.currentRealm$.pipe( takeUntil(this.subscriptions$) ).subscribe(data => {
       this.isRealmSelected = !!data;
       if (!!data) {
         this.setDefaultRequestParams();
         this.loadDevices();
       }
-    }));
-    this.subscriptions.add(this.dataSource.loadingSubject$.subscribe(
-      value => this.loading = value));
-    this.subscriptions.add(this.deviceProfileService.reloadDeviceList$.subscribe(() => this.loadDevices()
-    ));
+    });
+    this.dataSource.loadingSubject$.pipe( takeUntil(this.subscriptions$) ).subscribe(value => this.loading = value);
+    this.deviceProfileService.reloadDeviceList$.pipe( takeUntil(this.subscriptions$) ).subscribe(() => this.loadDevices());
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
-    this.paramRequest = DEFAULT_DEVICE_PARAM_REQUEST;
+    this.subscriptions$.next();
+    this.subscriptions$.complete();
+    this.setDefaultRequestParams();
   }
 
-  setDefaultRequestParams(): void {
+  private setDefaultRequestParams(): void {
     if (this.searchInput) {
       this.searchInput.nativeElement.value = '';
     }
     this.paramRequest = Object.assign({}, DEFAULT_DEVICE_PARAM_REQUEST);
   }
 
-  setPaginationRequest(data): void {
+  private setPaginationRequest(data): void {
     this.paramRequest.pageSize = data.pageSize;
     this.paramRequest.pageNumber = data.pageIndex;
   }
 
   private loadDevices() {
     this.selectAllDevicesCheckBoxChange(false, true);
-    // console.log(params);
     this.dataSource.loadDevices(this.paramRequest);
   }
 
@@ -97,7 +96,6 @@ export class DevicesComponent implements OnInit, OnDestroy {
   searchBy(search: string) {
     this.paramRequest.freeText = search;
     this.loadDevices();
-    // this.paramRequest.freeText = '';
   }
 
   sort(param: string) {
@@ -153,35 +151,36 @@ export class DevicesComponent implements OnInit, OnDestroy {
   }
 
   private addDeviceToPortal(data: AddDeviceModalRequest) {
+    if (!data) { return; }
     if (data.regType === AIM_AUTO) {
-      this.subscriptions.add(this.deviceProfileService.addDeviceClaim({
+     this.deviceProfileService.addDeviceClaim({
         device_name: data.form.deviceName,
         mt: 'VR-S3',
         sn: data.form.serialNumber,
         token: data.form.activationCode,
-      }).subscribe({
+      }).pipe( takeUntil(this.subscriptions$) ).subscribe({
         next: () => {
           this.showAlertMessage(DEVICE_ADDED_MESSAGE);
           this.loadDevices();
         },
         error: error => this.showAlertMessage(DEVICE_ADD_ERROR_MESSAGE, error)
-      }));
+      });
     } else {
-      this.subscriptions.add(this.deviceProfileService.addDeviceManually([{
+     this.deviceProfileService.addDeviceManually([{
         deviceName: data.form.deviceName,
         deviceSerialnumber: data.form.serialNumber,
-      }]).subscribe(responce => {
+      }]).pipe( takeUntil(this.subscriptions$) ).subscribe(responce => {
           saveAs(new Blob([responce]), 'devices.zip');
           this.showAlertMessage(DEVICE_ADDED_MESSAGE);
           this.loadDevices();
         },
         error => {
           this.showAlertMessage(DEVICE_ADD_ERROR_MESSAGE, error);
-        }));
+        });
     }
   }
 
-  showAlertMessage(message: string, error?: HttpErrorResponse) {
+  private showAlertMessage(message: string, error?: HttpErrorResponse) {
     this.alertService.showAlertMessage(message, error);
   }
 
@@ -190,7 +189,7 @@ export class DevicesComponent implements OnInit, OnDestroy {
     if (this.checkAllBoxes) {
       this.checkAllBoxes.nativeElement.checked = value;
     }
-    if (clear){
+    if (clear) {
       this.selectedDeviceIds = [];
     }
   }

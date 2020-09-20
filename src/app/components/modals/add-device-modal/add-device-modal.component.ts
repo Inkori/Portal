@@ -1,8 +1,8 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ADD_DEVICE_FORM} from '../../../common/form-constants';
-import {AIM_ALL, AIM_AUTO} from '../../../common/constants';
+import {AIM_ALL} from '../../../common/constants';
 import {DeviceProfileService} from '../../../services/device-profile.service';
 
 @Component({
