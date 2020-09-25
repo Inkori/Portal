@@ -11,17 +11,18 @@ import {
   DEFAULT_DEVICE_PARAM_REQUEST,
   DESC,
   DEVICE_ADD_ERROR_MESSAGE,
-  DEVICE_ADDED_MESSAGE,
+  DEVICE_ADD_MESSAGE,
   DEVICE_DELETE_ERROR_MESSAGE,
-  DEVICE_DELETE_MESSAGE
+  DEVICE_DELETE_MESSAGE, GROUP_ADD_ERROR_MESSAGE, GROUP_ADD_MESSAGE
 } from '../../common/constants';
 import {DeviceDataSource} from '../data-source/device-data-source';
-import {AddDeviceModalRequest, Page, ParamRequest} from '../../models/common';
+import {AddDeviceModalRequest, DeviceIdInfo, Page, ParamRequest} from '../../models/common';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {AddDeviceModalComponent} from '../modals/add-device-modal/add-device-modal.component';
 import {AlertService} from '../../services/alert.service';
 import {HttpErrorResponse} from '@angular/common/http';
 import {takeUntil} from 'rxjs/operators';
+import {GroupsModalComponent} from '../modals/groups-modal/groups-modal.component';
 
 @Component({
   selector: 'app-devices',
@@ -31,7 +32,7 @@ import {takeUntil} from 'rxjs/operators';
 export class DevicesComponent implements OnInit, OnDestroy {
   private readonly subscriptions$ = new Subject<void>();
   isRealmSelected: boolean;
-  dataSource: DeviceDataSource<Page<Device>>;
+  deviceDataSource: DeviceDataSource<Page<Device>>;
   loading: boolean;
   paramRequest: ParamRequest;
   displayedColumns = ['selectDevice', 'status', 'deviceDisplayName', 'deviceSerialnumber', 'groups'];
@@ -52,17 +53,17 @@ export class DevicesComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.setDefaultRequestParams();
     this.isRealmSelected = this.accManagement.isRealmSelected();
-    this.dataSource = new DeviceDataSource(this.deviceProfileService);
+    this.deviceDataSource = new DeviceDataSource(this.deviceProfileService);
     this.loadDevices();
-    this.accManagement.currentRealm$.pipe( takeUntil(this.subscriptions$) ).subscribe(data => {
+    this.accManagement.currentRealm$.pipe(takeUntil(this.subscriptions$)).subscribe(data => {
       this.isRealmSelected = !!data;
       if (!!data) {
         this.setDefaultRequestParams();
         this.loadDevices();
       }
     });
-    this.dataSource.loadingSubject$.pipe( takeUntil(this.subscriptions$) ).subscribe(value => this.loading = value);
-    this.deviceProfileService.reloadDeviceList$.pipe( takeUntil(this.subscriptions$) ).subscribe(() => this.loadDevices());
+    this.deviceDataSource.loadingSubject$.pipe(takeUntil(this.subscriptions$)).subscribe(value => this.loading = value);
+    this.deviceProfileService.reloadDeviceList$.pipe(takeUntil(this.subscriptions$)).subscribe(() => this.loadDevices());
   }
 
   ngOnDestroy(): void {
@@ -85,7 +86,7 @@ export class DevicesComponent implements OnInit, OnDestroy {
 
   private loadDevices() {
     this.selectAllDevicesCheckBoxChange(false, true);
-    this.dataSource.loadDevices(this.paramRequest);
+    this.deviceDataSource.loadDevices(this.paramRequest);
   }
 
   getServerData($event: PageEvent) {
@@ -105,7 +106,7 @@ export class DevicesComponent implements OnInit, OnDestroy {
   }
 
   delete() {
-    this.deviceProfileService.deleteDevices(this.selectedDeviceIds).subscribe({
+    this.deviceProfileService.deleteDevices(this.selectedDeviceIds).pipe(takeUntil(this.subscriptions$)).subscribe({
       next: () => {
         this.paramRequest.pageNumber = 0;
         this.paramRequest.freeText = '';
@@ -116,15 +117,15 @@ export class DevicesComponent implements OnInit, OnDestroy {
     });
   }
 
-  select(orgDeviceId: string, checked: boolean) {
-    if (checked && !this.selectedDeviceIds.find(value => value === orgDeviceId)) {
-      this.selectedDeviceIds.push(orgDeviceId);
+  select(deviceId: string, checked: boolean) {
+    if (checked && !this.selectedDeviceIds.find(value => value === deviceId)) {
+      this.selectedDeviceIds.push(deviceId);
       if (!this.selectAllDeviceIds && !this.checkBoxes.find(value => !value.nativeElement.checked)) {
         this.selectAllDevicesCheckBoxChange(true);
       }
     }
     if (!checked) {
-      this.selectedDeviceIds = this.selectedDeviceIds.filter(value => value !== orgDeviceId);
+      this.selectedDeviceIds = this.selectedDeviceIds.filter(value => value !== deviceId);
       if (this.selectAllDeviceIds) {
         this.selectAllDevicesCheckBoxChange(false);
       }
@@ -140,6 +141,7 @@ export class DevicesComponent implements OnInit, OnDestroy {
     );
   }
 
+// modals
   addDevice() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
@@ -151,33 +153,62 @@ export class DevicesComponent implements OnInit, OnDestroy {
   }
 
   private addDeviceToPortal(data: AddDeviceModalRequest) {
-    if (!data) { return; }
+    if (!data) {
+      return;
+    }
     if (data.regType === AIM_AUTO) {
-     this.deviceProfileService.addDeviceClaim({
+      this.deviceProfileService.addDeviceClaim({
         device_name: data.form.deviceName,
         mt: 'VR-S3',
         sn: data.form.serialNumber,
         token: data.form.activationCode,
-      }).pipe( takeUntil(this.subscriptions$) ).subscribe({
+      }).pipe(takeUntil(this.subscriptions$)).subscribe({
         next: () => {
-          this.showAlertMessage(DEVICE_ADDED_MESSAGE);
+          this.showAlertMessage(DEVICE_ADD_MESSAGE);
           this.loadDevices();
         },
         error: error => this.showAlertMessage(DEVICE_ADD_ERROR_MESSAGE, error)
       });
     } else {
-     this.deviceProfileService.addDeviceManually([{
+      this.deviceProfileService.addDeviceManually([{
         deviceName: data.form.deviceName,
         deviceSerialnumber: data.form.serialNumber,
-      }]).pipe( takeUntil(this.subscriptions$) ).subscribe(responce => {
+      }]).pipe(takeUntil(this.subscriptions$)).subscribe(responce => {
           saveAs(new Blob([responce]), 'devices.zip');
-          this.showAlertMessage(DEVICE_ADDED_MESSAGE);
+          this.showAlertMessage(DEVICE_ADD_MESSAGE);
           this.loadDevices();
         },
         error => {
           this.showAlertMessage(DEVICE_ADD_ERROR_MESSAGE, error);
         });
     }
+  }
+
+  addGroup() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    const dialogRef = this.dialog.open(GroupsModalComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(
+      data => {
+        if (data) {
+          this.addGroupToDevice(data);
+        }
+      });
+  }
+
+  private addGroupToDevice(groupIds: []) {
+    this.accManagement.assignGroupsBulk(this.selectedDeviceIds.map(id => ({deviceId: id})), groupIds)
+      .pipe(takeUntil(this.subscriptions$))
+      .subscribe({
+        next: () => {
+          this.paramRequest.pageNumber = 0;
+          this.paramRequest.freeText = '';
+          this.loadDevices();
+          this.showAlertMessage(GROUP_ADD_MESSAGE);
+        },
+        error: (error) => this.showAlertMessage(GROUP_ADD_ERROR_MESSAGE, error)
+      });
   }
 
   private showAlertMessage(message: string, error?: HttpErrorResponse) {

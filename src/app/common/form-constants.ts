@@ -5,7 +5,7 @@ import {
   DEVICE_COMMON_UPPER_CASE_ERROR_MESSAGE,
   DEVICE_COMMON_UPPER_CASE_REGEXP,
   DEVICE_NAME_ERROR_MESSAGE,
-  DEVICE_NAME_REGEXP,
+  DEVICE_NAME_REGEXP, TYPE_CHECKBOX,
   TYPE_TEXT
 } from './constants';
 
@@ -13,7 +13,7 @@ export const ADD_DEVICE_FORM = {
   deviceName: {
     label: 'Device Name (optional)',
     type: TYPE_TEXT,
-    aim: AIM_ALL,
+    aim: '',
     validators: [
       Validators.pattern(DEVICE_NAME_REGEXP),
     ],
@@ -36,7 +36,7 @@ export const ADD_DEVICE_FORM = {
   serialNumber: {
     label: 'Serial Number',
     type: TYPE_TEXT,
-    aim: AIM_ALL,
+    aim: '',
     validators: [
       Validators.required,
       Validators.pattern(DEVICE_COMMON_UPPER_CASE_REGEXP),
@@ -44,5 +44,15 @@ export const ADD_DEVICE_FORM = {
     errorMessages: {
       regex: DEVICE_COMMON_UPPER_CASE_ERROR_MESSAGE
     },
+  }
+};
+
+export const GROUP_LIST_FORM = {
+  groupId: {
+    label: 'groupId',
+    type: TYPE_CHECKBOX,
+    aim: '',
+    validators: [],
+    errorMessages: {}
   }
 };

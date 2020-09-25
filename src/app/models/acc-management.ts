@@ -42,3 +42,42 @@ export enum OrganizationStatus {
   SUSPENDED = 'suspended',
   INCOMPLETE = 'incomplete',
 }
+
+export enum GroupType {
+  USER = 'USER',
+  DEVICE = 'DEVICE',
+  APP = 'APP',
+}
+
+export class PageRequest {
+  pageNumber?: number;
+  pageSize?: number;
+  sortByProperty?: string;
+  sortByDirection?: boolean;
+  activityState?: string;
+  freeText?: string;
+  orgIds?: string;
+}
+
+export class GroupsPageRequest extends PageRequest {
+  type: GroupType;
+}
+
+export class Group {
+  apps: string[];
+  creatorId: string;
+  dateCreated: string;
+  dateModified: string;
+  devices: string[];
+  disableIdentityIntegration: boolean;
+  displayName: string;
+  groupId: string;
+  name: string;
+  orgId: string;
+  parentId: string;
+  resourceUrl: string;
+  type: GroupType;
+  users: string[];
+}
+
+

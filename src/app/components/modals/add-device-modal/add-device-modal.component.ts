@@ -4,6 +4,8 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ADD_DEVICE_FORM} from '../../../common/form-constants';
 import {AIM_ALL} from '../../../common/constants';
 import {DeviceProfileService} from '../../../services/device-profile.service';
+import {FormService} from '../../../services/form.service';
+import {FormSupplier} from '../../../models/common';
 
 @Component({
   selector: 'app-add-device-modal',
@@ -19,6 +21,7 @@ export class AddDeviceModalComponent {
   constructor(private formBuilder: FormBuilder,
               private dialogRef: MatDialogRef<AddDeviceModalComponent>,
               private deviceProfileService: DeviceProfileService,
+              private formService: FormService,
               @Inject(MAT_DIALOG_DATA) data) {
   }
 
@@ -28,27 +31,11 @@ export class AddDeviceModalComponent {
 
   registrationTypeChange(type: string) {
     this.registrationType = type;
-    this.changeForm();
+    const formSupplier = this.formService.prepareForm(ADD_DEVICE_FORM, type);
+    this.form = formSupplier.form;
+    this.addDeviceProps = formSupplier.props;
   }
 
-
-  private changeForm() {
-    const formDataObj = {};
-    this.addDeviceProps = [];
-    for (const prop of Object.keys(this.formDataObj)) {
-      if (this.formDataObj[prop].aim === this.registrationType || this.formDataObj[prop].aim === AIM_ALL) {
-        formDataObj[prop] = new FormControl('', this.formDataObj[prop].validators);
-        this.addDeviceProps.push({
-          key: prop,
-          label: this.formDataObj[prop].label,
-          aim: this.formDataObj[prop].aim,
-          type: this.formDataObj[prop].type,
-          errorMessages: this.formDataObj[prop].errorMessages
-        });
-        this.form = new FormGroup(formDataObj);
-      }
-    }
-  }
 
   submit() {
     this.dialogRef.close({

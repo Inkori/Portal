@@ -1,5 +1,6 @@
 // local storage
 import {ParamRequest} from '../models/common';
+import {GroupsPageRequest, GroupType} from '../models/acc-management';
 
 export const REALM = 'realm';
 export const SUBSCRIPTION_ID = 'subscriptionId';
@@ -23,14 +24,23 @@ export const DEVICE_NAME_ERROR_MESSAGE = 'You can use numbers, letters, undersco
 export const AIM_ALL = 'All';
 export const AIM_AUTO = 'Auto';
 export const TYPE_TEXT = 'text';
+export const TYPE_CHECKBOX = 'checkbox';
 
-// errors
+// messages
 export const DEVICE_ADD_ERROR_MESSAGE = 'Can\'t add device. Reason: ';
-export const DEVICE_ADDED_MESSAGE = 'Device has been added';
+export const DEVICE_ADD_MESSAGE = 'Device has been added';
+export const GROUP_ADD_ERROR_MESSAGE = 'Can\'t assign group. Reason: ';
+export const GROUP_ADD_MESSAGE = 'Group has been assigned';
 export const DEVICE_DELETE_ERROR_MESSAGE = 'Can\'t delete device. Error: ';
 export const DEVICE_DELETE_MESSAGE = 'Selected devices have been deleted';
 
-// param request
+// requests
 export const DEFAULT_DEVICE_PARAM_REQUEST: ParamRequest = Object.freeze({
   pageNumber: 0, pageSize: 7, sortByProperty: 'deviceName', sortByDirection: ASC, freeText: ''
 });
+export const DEFAULT_GROUP_PARAM_REQUEST: GroupsPageRequest = {
+  'type': GroupType.DEVICE, 'activityState' : 'ACTIVE', 'pageNumber': 0, 'pageSize': 5, 'sortByProperty': 'displayName', 'sortByDirection': true
+}
+
+// entity type
+export const TYPE_DEVICE = 'DEVICE';

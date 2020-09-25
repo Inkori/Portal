@@ -1,7 +1,10 @@
+import {FormGroup} from '@angular/forms';
+
 export interface Page<T> {
   readonly number: number;
   readonly size: number;
-  readonly content: T[];
+  readonly content?: T[];
+  readonly _embedded?: { [key: string]: T[] };
   readonly totalElements: number;
   readonly totalPages: number;
 }
@@ -31,4 +34,16 @@ export interface AddDeviceModalRequest {
   regType: string;
 }
 
+export interface DeviceIdInfo {
+  deviceId: string;
+}
 
+export interface AddGroupRequest {
+  deviceAddParamList: DeviceIdInfo[];
+  groupParamList: [];
+}
+
+export interface FormSupplier {
+  form: FormGroup;
+  props: Array<any>;
+}

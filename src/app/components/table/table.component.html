@@ -1,0 +1,35 @@
+<!--<div class="spinner-container spinner-center" *ngIf="loading">-->
+<!--  <mat-spinner></mat-spinner>-->
+<!--</div>-->
+<!--<div [ngClass]="{hide: loading}">-->
+<!--  <mat-table class="mat-elevation-z8" [dataSource]="dataSource">-->
+<!--    <ng-container matColumnDef="groupId">-->
+<!--      <mat-header-cell *matHeaderCellDef><input #checkAll type="checkbox" (change)="selectAll(checkAll.checked)">-->
+<!--      </mat-header-cell>-->
+<!--      <mat-cell *matCellDef="let row"><input #check type="checkbox" (change)="select(row.groupId, check.checked)">-->
+<!--      </mat-cell>-->
+<!--    </ng-container>-->
+
+<!--    <ng-container matColumnDef="groups">-->
+<!--      <mat-header-cell class="activated" *matHeaderCellDef>Group Name-->
+<!--      </mat-header-cell>-->
+<!--      <mat-cell *matCellDef="let row"> {{row.name}} </mat-cell>-->
+<!--    </ng-container>-->
+
+<!--    <mat-header-row *matHeaderRowDef=displayedColumns></mat-header-row>-->
+<!--    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>-->
+
+<!--  </mat-table>-->
+
+<!--  <div *ngIf="dataSource.page$ | async as page">-->
+<!--    &lt;!&ndash;    <div *ngIf="isRealmSelected && !loading && page.totalElements<1 && !paramRequest.freeText"><p>This organisation doesn't have devices</p></div>&ndash;&gt;-->
+<!--    <mat-paginator #paginator-->
+<!--                   [pageSize]="paramRequest.pageSize"-->
+<!--                   [pageSizeOptions]="[1, 5, 10, 20]"-->
+<!--                   [length]="page.totalElements"-->
+<!--                   [pageIndex]="page.number"-->
+<!--                   (page)="getServerData($event)"-->
+<!--                   [showFirstLastButtons]="true">>-->
+<!--    </mat-paginator>-->
+<!--  </div>-->
+<!--</div>-->

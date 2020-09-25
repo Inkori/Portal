@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AccountManagementService} from '../../services/account-management.service';
 import {AuthService} from '../../services/auth.service';
-import {Organization} from '../../models/organizations';
+import {Organization} from '../../models/acc-management';
 import {DeviceProfileService} from '../../services/device-profile.service';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';

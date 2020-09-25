@@ -3,7 +3,7 @@ import {ActivatedRouteSnapshot, Router, RouterStateSnapshot} from '@angular/rout
 import {KeycloakAuthGuard, KeycloakService} from 'keycloak-angular';
 
 @Injectable()
-export class AppAuthGuard extends KeycloakAuthGuard {
+export class AppAuthGuard extends KeycloakAuthGuard{
   constructor(protected router: Router, protected keycloakAngular: KeycloakService) {
     super(router, keycloakAngular);
   }
@@ -21,5 +21,9 @@ export class AppAuthGuard extends KeycloakAuthGuard {
       return true;
     }
     return requiredRoles.every((role) => this.roles.includes(role));
+  }
+
+  canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
+    return this.isAccessAllowed(route, state);
   }
 }

@@ -7,21 +7,21 @@
   <!--  Use hide instead of *ngIf because element will not be load after subscription switch-->
   <div [ngClass]="{hide:!isRealmSelected || loading}">
     <button mat-button class="btn" (click)="addDevice()"><span>Add new device</span></button>
-    <button mat-button class="btn"><span>Deploy</span></button>
-    <button mat-button class="btn"><span>Group</span></button>
-    <button mat-button class="btn"><span>Settings</span></button>
+    <button mat-button class="btn" [disabled]="!selectedDeviceIds.length"><span>Deploy</span></button>
+    <button mat-button class="btn" [disabled]="!selectedDeviceIds.length" (click)="addGroup()"><span>Group</span></button>
+    <button mat-button class="btn" [disabled]="!selectedDeviceIds.length"><span>Settings</span></button>
     <button mat-button class="btn" [disabled]="!selectedDeviceIds.length" (click)="delete()"><span>Delete</span>
     </button>
     <div class="little">
       <mat-icon matPrefix>search</mat-icon>
       <input matInput #searchInput (keyup.enter)="searchBy(searchInput.value)" type="text" placeholder="Search">
     </div>
-    <mat-table class="mat-elevation-z8" [dataSource]="dataSource">
+    <mat-table class="mat-elevation-z8" [dataSource]="deviceDataSource">
 
       <ng-container matColumnDef="selectDevice">
         <mat-header-cell *matHeaderCellDef><input #checkAll type="checkbox" (change)="selectAll(checkAll.checked)">
         </mat-header-cell>
-        <mat-cell *matCellDef="let row"><input #check type="checkbox" (change)="select(row.orgDeviceId, check.checked)">
+        <mat-cell *matCellDef="let row"><input #check type="checkbox" (change)="select(row.deviceId, check.checked)">
         </mat-cell>
       </ng-container>
 
@@ -57,7 +57,7 @@
       <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
 
     </mat-table>
-    <div *ngIf="dataSource.page$ | async as page">
+    <div *ngIf="deviceDataSource.page$ | async as page">
       <div *ngIf="isRealmSelected && !loading && page.totalElements<1 && !paramRequest.freeText"><p>This organisation doesn't have devices</p></div>
       <div *ngIf="isRealmSelected && !loading && page.totalElements<1 && paramRequest.freeText"><p>Device with current search params doesn't exist</p></div>
       <mat-paginator #paginator

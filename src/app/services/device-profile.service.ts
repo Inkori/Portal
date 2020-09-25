@@ -43,6 +43,7 @@ export class DeviceProfileService {
       .set('page', `${pageNumber}`)
       .set('size', `${pageSize}`)
       .set('sort', `${sortByProperty},${sortByDirection}`)
+      // .set('sort', `${sortByProperty},${sortByDirection ? 'ASC' : 'DESC'}`)
       .set('freeText', `${freeText}`);
   }
 }

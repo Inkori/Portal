@@ -34,6 +34,9 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {AddDeviceModalComponent} from './components/modals/add-device-modal/add-device-modal.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {GroupsModalComponent} from './components/modals/groups-modal/groups-modal.component';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {TableComponent} from './components/table/table.component';
 
 
 @NgModule({
@@ -48,6 +51,8 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     SubscriptionBarComponent,
     RealmSelectionComponent,
     AddDeviceModalComponent,
+    GroupsModalComponent,
+    TableComponent,
   ],
   imports: [
     HttpClientModule,
@@ -73,14 +78,15 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     MatDialogModule,
     FormsModule,
     ReactiveFormsModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatCheckboxModule
   ],
   providers: [
     {provide: APP_INITIALIZER, useFactory: initializer, multi: true, deps: [KeycloakService]},
     {provide: HTTP_INTERCEPTORS, useClass: SubscriptionInterceptor, multi: true},
   ],
   bootstrap: [AppComponent],
-  entryComponents: [AddDeviceModalComponent]
+  entryComponents: [AddDeviceModalComponent, GroupsModalComponent]
 })
 export class AppModule {
 }

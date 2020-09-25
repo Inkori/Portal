@@ -3,9 +3,10 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {Environment} from '../../environments/environment';
 import {ORG_REALMS, REALM, SUBSCRIPTION_ID} from '../common/constants';
 import {Subscription} from '../models/subscription';
-import {Organization} from '../models/organizations';
-import {map} from 'rxjs/operators';
+import {Group, GroupsPageRequest, Organization} from '../models/acc-management';
+import {pluck} from 'rxjs/operators';
 import {Observable, Subject} from 'rxjs';
+import {DeviceIdInfo, Page} from '../models/common';
 
 @Injectable({
   providedIn: 'root'
@@ -17,21 +18,29 @@ export class AccountManagementService {
   orgListUpdateEvent$ = new Subject<Subscription>();
 
   constructor(private http: HttpClient) {
-    this.url = Environment.portalUrl + '/lcp-account-management/apis/v1/organizations';
+    this.url = Environment.portalUrl + '/lcp-account-management/apis/v1';
   }
 
   getRealmsFromApi(subscription: Subscription): Observable<Organization[]> {
     const params = new HttpParams().set(SUBSCRIPTION_ID, subscription.id);
     this.removeCurrentRealm();
 
-    return this.http.get<Organization[]>(this.url, {params})
+    return this.http.get<Page<Organization>>(this.url + '/organizations', {params})
       .pipe(
-        map(json => json['_embedded']),
-        map(embedded => embedded['organizationList']));
+        pluck('_embedded', 'organizationList'));
+  }
+
+  getGroupsList(pageRequest: GroupsPageRequest): Observable<Page<Group>> {
+    const params = this.getHttpParams(pageRequest);
+    return this.http.get<Page<Group>>(this.url + '/groups', {params});
+  }
+
+  assignGroupsBulk(deviceAddParamList: DeviceIdInfo[], groupParamList: string[]): Observable<void> {
+    return this.http.post<void>(this.url + '/groups/devices/addBulk', {deviceAddParamList, groupParamList});
   }
 
   sendOrgUpdateEvent(subscription: Subscription) {
-     this.orgListUpdateEvent$.next(subscription);
+    this.orgListUpdateEvent$.next(subscription);
   }
 
   setSubscription(subscription: Subscription) {
@@ -71,6 +80,16 @@ export class AccountManagementService {
   private removeCurrentRealm() {
     localStorage.removeItem(REALM);
     this.currentRealm$.next(null);
+  }
+
+  private getHttpParams(pageRequest: GroupsPageRequest): HttpParams {
+    return new HttpParams()
+      .set('activityState', pageRequest.activityState)
+      .set('type', pageRequest.type)
+      .set('pageNumber', `${pageRequest.pageNumber}`)
+      .set('pageSize', `${pageRequest.pageSize}`)
+      .set('sortByPropertyList', pageRequest.sortByProperty)
+      .set('sortByDirection', `${pageRequest.sortByDirection ? 'ASC' : 'DESC'}`);
   }
 }
 
