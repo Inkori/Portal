@@ -33,6 +33,10 @@ export const GROUP_ADD_ERROR_MESSAGE = 'Can\'t assign group. Reason: ';
 export const GROUP_ADD_MESSAGE = 'Group has been assigned';
 export const DEVICE_DELETE_ERROR_MESSAGE = 'Can\'t delete device. Error: ';
 export const DEVICE_DELETE_MESSAGE = 'Selected devices have been deleted';
+export const GROUP_LIST_EMPTY_MESSAGE = 'This organisation doesn\'t have groups';
+export const GROUP_SEARCH_RESPONSE_EMPTY_MESSAGE = 'Group with current search params doesn\'t exist';
+export const DEVICE_LIST_EMPTY_MESSAGE = 'This organisation doesn\'t have devices';
+export const DEVICE_SEARCH_RESPONSE_EMPTY_MESSAGE = 'Device with current search params doesn\'t exist';
 
 // requests
 export const DEFAULT_DEVICE_PARAM_REQUEST: ParamRequest = Object.freeze({
@@ -44,3 +48,7 @@ export const DEFAULT_GROUP_PARAM_REQUEST: GroupsPageRequest = {
 
 // entity type
 export const TYPE_DEVICE = 'DEVICE';
+
+// table columns
+export const DEVICE_TABLE_COLUMNS = ['selectId', 'deviceState.status', 'deviceName', 'deviceSerialnumber', 'groups'];
+export const GROUP_TABLE_COLUMNS = ['groupId', 'name'];

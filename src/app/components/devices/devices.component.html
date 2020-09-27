@@ -1,73 +1,76 @@
 <app-realm-selection [pageName]="pageName"></app-realm-selection>
 
+<!--<div class="mat-elevation-z8">-->
+<!--  <div class="spinner-container spinner-center" *ngIf="loading">-->
+<!--    <mat-spinner></mat-spinner>-->
+<!--  </div>-->
+<!--  &lt;!&ndash;  Use hide instead of *ngIf because element will not be load after subscription switch&ndash;&gt;-->
+<!--  <div [ngClass]="{hide:!isRealmSelected || loading}">-->
+<!--    <button mat-button class="btn" (click)="addDevice()"><span>Add new device</span></button>-->
+<!--    <button mat-button class="btn" [disabled]="!selectedDeviceIds.length"><span>Deploy</span></button>-->
+<!--    <button mat-button class="btn" [disabled]="!selectedDeviceIds.length" (click)="addGroup()"><span>Group</span></button>-->
+<!--    <button mat-button class="btn" [disabled]="!selectedDeviceIds.length"><span>Settings</span></button>-->
+<!--    <button mat-button class="btn" [disabled]="!selectedDeviceIds.length" (click)="delete()"><span>Delete</span>-->
+<!--    </button>-->
+<!--    <div class="little">-->
+<!--      <mat-icon matPrefix>search</mat-icon>-->
+<!--      <input matInput #searchInput (keyup.enter)="searchBy(searchInput.value)" type="text" placeholder="Search" autocomplete="off">-->
+<!--    </div>-->
+<!--    <mat-table class="mat-elevation-z8" [dataSource]="deviceDataSource">-->
+
+<!--      <ng-container matColumnDef="selectId">-->
+<!--        <mat-header-cell *matHeaderCellDef><input #checkAll type="checkbox" (change)="selectAll(checkAll.checked)">-->
+<!--        </mat-header-cell>-->
+<!--        <mat-cell *matCellDef="let row"><input #check type="checkbox" (change)="select(row.deviceId, check.checked)">-->
+<!--        </mat-cell>-->
+<!--      </ng-container>-->
+
+<!--      <ng-container matColumnDef="status">-->
+<!--        <mat-header-cell class="activated" *matHeaderCellDef (click)="sort('deviceState')">Device status-->
+<!--        </mat-header-cell>-->
+<!--        <mat-cell *matCellDef="let row"> {{row.deviceState.status}} </mat-cell>-->
+<!--      </ng-container>-->
+
+<!--      <ng-container matColumnDef="deviceDisplayName">-->
+<!--        <mat-header-cell class="activated" *matHeaderCellDef (click)="sort('deviceName')">Device name</mat-header-cell>-->
+<!--        <mat-cell *matCellDef="let row"> {{row.deviceName}} </mat-cell>-->
+<!--      </ng-container>-->
+
+<!--      <ng-container matColumnDef="deviceSerialnumber">-->
+<!--        <mat-header-cell class="activated" *matHeaderCellDef (click)="sort('deviceSerialnumber')">Serial number-->
+<!--        </mat-header-cell>-->
+<!--        <mat-cell *matCellDef="let row"> {{row.deviceSerialnumber}} </mat-cell>-->
+<!--      </ng-container>-->
+
+<!--      <ng-container matColumnDef="groups">-->
+<!--        <mat-header-cell *matHeaderCellDef>Groups</mat-header-cell>-->
+<!--        <mat-cell *matCellDef="let row">-->
+<!--          <table>-->
+<!--            <tr *ngFor="let group of row.groups">-->
+<!--              <td>{{ group.groupName }}</td>-->
+<!--            </tr>-->
+<!--          </table>-->
+<!--        </mat-cell>-->
+<!--      </ng-container>-->
+
+<!--      <mat-header-row *matHeaderRowDef=displayedColumns></mat-header-row>-->
+<!--      <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>-->
+
+<!--    </mat-table>-->
+<!--    <div *ngIf="deviceDataSource.page$ | async as page">-->
+<!--      <div *ngIf="isRealmSelected && !loading && !page.totalElements && !paramRequest.freeText"><p>This organisation doesn't have devices</p></div>-->
+<!--      <div *ngIf="isRealmSelected && !loading && !page.totalElements && paramRequest.freeText"><p>Device with current search params doesn't exist</p></div>-->
+<!--      <mat-paginator #paginator-->
+<!--                     [pageSize]="paramRequest.pageSize"-->
+<!--                     [pageSizeOptions]="[1, 5, 10, 20]"-->
+<!--                     [length]="page.totalElements"-->
+<!--                     [pageIndex]="page.number"-->
+<!--                     (page)="getServerData($event)"-->
+<!--                     [showFirstLastButtons]="true">>-->
+<!--      </mat-paginator>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
 <div class="mat-elevation-z8">
-  <div class="spinner-container spinner-center" *ngIf="loading">
-    <mat-spinner></mat-spinner>
-  </div>
-  <!--  Use hide instead of *ngIf because element will not be load after subscription switch-->
-  <div [ngClass]="{hide:!isRealmSelected || loading}">
-    <button mat-button class="btn" (click)="addDevice()"><span>Add new device</span></button>
-    <button mat-button class="btn" [disabled]="!selectedDeviceIds.length"><span>Deploy</span></button>
-    <button mat-button class="btn" [disabled]="!selectedDeviceIds.length" (click)="addGroup()"><span>Group</span></button>
-    <button mat-button class="btn" [disabled]="!selectedDeviceIds.length"><span>Settings</span></button>
-    <button mat-button class="btn" [disabled]="!selectedDeviceIds.length" (click)="delete()"><span>Delete</span>
-    </button>
-    <div class="little">
-      <mat-icon matPrefix>search</mat-icon>
-      <input matInput #searchInput (keyup.enter)="searchBy(searchInput.value)" type="text" placeholder="Search" autocomplete="off">
-    </div>
-    <mat-table class="mat-elevation-z8" [dataSource]="deviceDataSource">
-
-      <ng-container matColumnDef="selectDevice">
-        <mat-header-cell *matHeaderCellDef><input #checkAll type="checkbox" (change)="selectAll(checkAll.checked)">
-        </mat-header-cell>
-        <mat-cell *matCellDef="let row"><input #check type="checkbox" (change)="select(row.deviceId, check.checked)">
-        </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="status">
-        <mat-header-cell class="activated" *matHeaderCellDef (click)="sort('deviceState')">Device status
-        </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.deviceState.status}} </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="deviceDisplayName">
-        <mat-header-cell class="activated" *matHeaderCellDef (click)="sort('deviceName')">Device name</mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.deviceName}} </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="deviceSerialnumber">
-        <mat-header-cell class="activated" *matHeaderCellDef (click)="sort('deviceSerialnumber')">Serial number
-        </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.deviceSerialnumber}} </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="groups">
-        <mat-header-cell *matHeaderCellDef>Groups</mat-header-cell>
-        <mat-cell *matCellDef="let row">
-          <table>
-            <tr *ngFor="let group of row.groups">
-              <td>{{ group.groupName }}</td>
-            </tr>
-          </table>
-        </mat-cell>
-      </ng-container>
-
-      <mat-header-row *matHeaderRowDef=displayedColumns></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
-
-    </mat-table>
-    <div *ngIf="deviceDataSource.page$ | async as page">
-      <div *ngIf="isRealmSelected && !loading && !page.totalElements && !paramRequest.freeText"><p>This organisation doesn't have devices</p></div>
-      <div *ngIf="isRealmSelected && !loading && !page.totalElements && paramRequest.freeText"><p>Device with current search params doesn't exist</p></div>
-      <mat-paginator #paginator
-                     [pageSize]="paramRequest.pageSize"
-                     [pageSizeOptions]="[1, 5, 10, 20]"
-                     [length]="page.totalElements"
-                     [pageIndex]="page.number"
-                     (page)="getServerData($event)"
-                     [showFirstLastButtons]="true">>
-      </mat-paginator>
-    </div>
-  </div>
+<app-table [dataSourceType]="dataSourceType" (idListEmitter)="getIdList($event)"></app-table>
 </div>

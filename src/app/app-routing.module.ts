@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {DeviceGroupsComponent} from './components/device-groups/device-groups.component';
+import {GroupsComponent} from './components/groups/groups.component';
 import {HomePageComponent} from './components/home-page/home-page.component';
 import {DeviceRegistryComponent} from './components/device-registry/device-registry.component';
 import {DevicesComponent} from './components/devices/devices.component';
@@ -17,7 +17,7 @@ export const routes: Routes = [
     data: {ico: 'devices', title: 'Devices'}
   },
   {path: 'groups',
-    component: DeviceGroupsComponent,
+    component: GroupsComponent,
     canActivate: [AppAuthGuard],
     data: {ico: 'groups', title: 'Groups'}
   },

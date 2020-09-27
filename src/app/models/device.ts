@@ -53,7 +53,7 @@ export enum DeviceStatusCapitalize {
   UNACTIVATED = 'Unactivated',
 }
 
-export interface GroupsInDevice {
+export class GroupsInDevice {
   groupId: string;
   groupName: string;
 }

@@ -1,20 +1,21 @@
-import {DataSource} from '@angular/cdk/collections';
 import {Device} from '../../models/device';
 import {Observable, Subject} from 'rxjs';
 import {DeviceProfileService} from '../../services/device-profile.service';
-import {Page, ParamRequest} from '../../models/common';
-import {finalize, pluck, takeUntil} from 'rxjs/operators';
+import {CommonDataSource, Page, PageInner, ParamRequest} from '../../models/common';
+import {finalize, map, pluck, takeUntil} from 'rxjs/operators';
 import {OnDestroy} from '@angular/core';
+import {DevicesResponse} from '../../models/acc-management';
 
-export class DeviceDataSource<T> implements DataSource<Device>, OnDestroy {
+export class DeviceDataSource<T> extends CommonDataSource<Device> implements OnDestroy {
   private readonly subscriptions$ = new Subject<void>();
   private loadingSubject = new Subject<boolean>();
-  private devicesSubject = new Subject<Page<Device>>();
+  private devicesSubject = new Subject<DevicesResponse>();
 
   public page$ = this.devicesSubject.asObservable();
   public loadingSubject$ = this.loadingSubject.asObservable();
 
   constructor(private deviceProfileService: DeviceProfileService) {
+    super();
   }
 
   connect(): Observable<Device[]> {
@@ -26,16 +27,21 @@ export class DeviceDataSource<T> implements DataSource<Device>, OnDestroy {
     this.loadingSubject.complete();
   }
 
-  loadDevices(request: ParamRequest) {
+  load(request: ParamRequest) {
     this.loadingSubject.next(true);
 
     this.deviceProfileService.getDevicesFromApi(request)
       .pipe(
+        map(data  => ({content: data.content, page: this.createPage(data)})),
         finalize(() => this.loadingSubject.next(false)),
         takeUntil(this.subscriptions$))
       .subscribe(devices => {
         this.devicesSubject.next(devices);
       });
+  }
+
+  private createPage(data: Page<any>): PageInner{
+       return {number: data.number, size: data.size, totalElements: data.totalElements, totalPages: data.totalPages }
   }
 
   ngOnDestroy(): void {

@@ -1,15 +1,28 @@
-import {Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewChildren} from '@angular/core';
-import {Page} from '../../models/common';
+import {Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, ViewChildren} from '@angular/core';
+import {CommonDataSource, DataSourceType} from '../../models/common';
 import {takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
 import {GroupsDataSource} from '../data-source/groups-data-source';
-import {Group, GroupsPageRequest} from '../../models/acc-management';
+import {GroupsPageRequest} from '../../models/acc-management';
 import {AccountManagementService} from '../../services/account-management.service';
-import {DEFAULT_GROUP_PARAM_REQUEST, GROUP_ADD_ERROR_MESSAGE, GROUP_ADD_MESSAGE} from '../../common/constants';
+import {
+  DEFAULT_DEVICE_PARAM_REQUEST,
+  DEFAULT_GROUP_PARAM_REQUEST,
+  DEVICE_LIST_EMPTY_MESSAGE,
+  DEVICE_SEARCH_RESPONSE_EMPTY_MESSAGE,
+  DEVICE_TABLE_COLUMNS,
+  GROUP_ADD_ERROR_MESSAGE,
+  GROUP_ADD_MESSAGE,
+  GROUP_LIST_EMPTY_MESSAGE,
+  GROUP_SEARCH_RESPONSE_EMPTY_MESSAGE,
+  GROUP_TABLE_COLUMNS
+} from '../../common/constants';
 import {PageEvent} from '@angular/material/paginator';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {DeviceModalComponent} from '../modals/device-modal/device-modal.component';
 import {AlertService} from '../../services/alert.service';
+import {DeviceDataSource} from '../data-source/device-data-source';
+import {DeviceProfileService} from '../../services/device-profile.service';
 
 @Component({
   selector: 'app-table',
@@ -18,19 +31,28 @@ import {AlertService} from '../../services/alert.service';
 })
 export class TableComponent implements OnInit, OnDestroy {
   private readonly subscriptions$ = new Subject<void>();
-  dataSource: GroupsDataSource<Page<Group>>;
-  displayedColumns = ['groupId', 'groups'];
-  paramRequest: GroupsPageRequest;
+  dataSource: CommonDataSource<any>;
+  displayedColumns = [];
+  paramRequest: any;
+  defaultParamRequest: any;
   isRealmSelected: boolean;
   loading: boolean;
+  emptyListMessage: string;
+  emptySearchResponseMessage: string;
   selectedIds = [];
   selectAllIds = false;
 
   @ViewChild('searchInput') searchInput: ElementRef;
   @ViewChild('checkAll') checkAllBoxes: ElementRef;
   @ViewChildren('check') checkBoxes: ElementRef[];
+  @Input() dataSourceType: DataSourceType;
+  @Output() idListEmitter = new EventEmitter<string[]>();
 
-  constructor(private accManagement: AccountManagementService, private alertService: AlertService, private dialog: MatDialog) {
+
+  constructor(private accManagement: AccountManagementService,
+              private deviceProfileService: DeviceProfileService,
+              private alertService: AlertService,
+              private dialog: MatDialog) {
   }
 
   ngOnDestroy(): void {
@@ -41,19 +63,35 @@ export class TableComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.isRealmSelected = this.accManagement.isRealmSelected();
-    this.paramRequest = Object.assign({}, DEFAULT_GROUP_PARAM_REQUEST);
-    this.dataSource = new GroupsDataSource<Page<Group>>(this.accManagement);
-    this.dataSource.loadGroups(DEFAULT_GROUP_PARAM_REQUEST);
+    this.initDependsOnDataSourceType();
+    this.dataSource.load(this.defaultParamRequest);
     this.dataSource.loadingSubject$.pipe(takeUntil(this.subscriptions$)).subscribe(value => this.loading = value);
     this.accManagement.reloadPage$.pipe(takeUntil(this.subscriptions$)).subscribe(() => this.load());
     this.accManagement.currentRealm$.pipe(takeUntil(this.subscriptions$)).subscribe(data => {
       this.isRealmSelected = !!data;
       if (!!data) {
-        this.load(DEFAULT_GROUP_PARAM_REQUEST);
+        this.load(this.defaultParamRequest);
       }
     });
   }
 
+  private initDependsOnDataSourceType(): void {
+    if (DataSourceType.DEVICE === this.dataSourceType) {
+      this.displayedColumns = DEVICE_TABLE_COLUMNS;
+      this.paramRequest = Object.assign({}, DEFAULT_DEVICE_PARAM_REQUEST);
+      this.defaultParamRequest = Object.assign({}, DEFAULT_DEVICE_PARAM_REQUEST);
+      this.emptyListMessage = DEVICE_LIST_EMPTY_MESSAGE;
+      this.emptySearchResponseMessage = DEVICE_SEARCH_RESPONSE_EMPTY_MESSAGE;
+      this.dataSource = new DeviceDataSource(this.deviceProfileService);
+    } else if (DataSourceType.GROUP === this.dataSourceType) {
+      this.displayedColumns = GROUP_TABLE_COLUMNS;
+      this.paramRequest = Object.assign({}, DEFAULT_GROUP_PARAM_REQUEST);
+      this.defaultParamRequest = Object.assign({}, DEFAULT_GROUP_PARAM_REQUEST);
+      this.emptyListMessage = GROUP_LIST_EMPTY_MESSAGE;
+      this.emptySearchResponseMessage = GROUP_SEARCH_RESPONSE_EMPTY_MESSAGE;
+      this.dataSource = new GroupsDataSource(this.accManagement);
+    }
+  }
 
   select(id: string, checked: boolean) {
     if (checked && !this.selectedIds.find(value => value === id)) {
@@ -68,7 +106,7 @@ export class TableComponent implements OnInit, OnDestroy {
         this.selectAllCheckBoxes(false);
       }
     }
-    console.log('ids: ' + this.selectedIds);
+    this.idListEmitter.emit(this.selectedIds);
   }
 
   selectAll(checked: boolean) {
@@ -101,7 +139,7 @@ export class TableComponent implements OnInit, OnDestroy {
     if (this.searchInput) {
       this.searchInput.nativeElement.value = '';
     }
-    this.paramRequest = Object.assign({}, DEFAULT_GROUP_PARAM_REQUEST);
+    this.paramRequest = Object.assign({}, this.defaultParamRequest);
   }
 
   private setPaginationRequest(data): void {
@@ -111,8 +149,8 @@ export class TableComponent implements OnInit, OnDestroy {
 
   private load(paramRequest?: GroupsPageRequest) {
     // this.selectAllCheckBoxes(false, true);
-    this.dataSource.loadGroups(paramRequest ? paramRequest : this.paramRequest);
-    this.dataSource.page$.subscribe( () => this.activateCheckBoxes())
+    this.dataSource.load(paramRequest ? paramRequest : this.paramRequest);
+    this.dataSource.page$.subscribe(() => this.activateCheckBoxes());
   }
 
   private selectAllCheckBoxes(value: boolean, clear?: boolean) {
@@ -151,10 +189,20 @@ export class TableComponent implements OnInit, OnDestroy {
         next: () => {
           this.paramRequest.pageNumber = 0;
           this.paramRequest.freeText = '';
-          this.load(DEFAULT_GROUP_PARAM_REQUEST);
+          this.load(this.defaultParamRequest);
           this.alertService.showAlertMessage(GROUP_ADD_MESSAGE);
         },
         error: (error) => this.alertService.showAlertMessage(GROUP_ADD_ERROR_MESSAGE, error)
       });
+  }
+
+  isArray(obj: any): boolean {
+    return Array.isArray(obj);
+  }
+
+  getInnerData(element: any): string {
+    // todo type check(instance of doesn't work!)
+      return element.groupName;
+
   }
 }

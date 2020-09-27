@@ -6,7 +6,7 @@ import {AppComponent} from './app.component';
 import {HomePageComponent} from './components/home-page/home-page.component';
 import {DevicesComponent} from './components/devices/devices.component';
 import {DeviceRegistryComponent} from './components/device-registry/device-registry.component';
-import {DeviceGroupsComponent} from './components/device-groups/device-groups.component';
+import {GroupsComponent} from './components/groups/groups.component';
 import {ErrorPageComponent} from './components/error-page/error-page.component';
 import {KeycloakAngularModule, KeycloakService} from 'keycloak-angular';
 import {initializer} from '../appInit';
@@ -45,7 +45,7 @@ import {DeviceModalComponent} from './components/modals/device-modal/device-moda
     HomePageComponent,
     DevicesComponent,
     DeviceRegistryComponent,
-    DeviceGroupsComponent,
+    GroupsComponent,
     ErrorPageComponent,
     SubscriptionBarComponent,
     RealmSelectionComponent,

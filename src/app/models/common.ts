@@ -1,4 +1,6 @@
 import {FormGroup} from '@angular/forms';
+import {DataSource} from '@angular/cdk/collections';
+import {Observable} from 'rxjs';
 
 export interface Page<T> {
   readonly number: number;
@@ -49,4 +51,15 @@ export interface DeviceIdInfo {
 export interface FormSupplier {
   form: FormGroup;
   props: Array<any>;
+}
+
+export enum DataSourceType {
+  DEVICE,
+  GROUP,
+}
+
+export abstract class CommonDataSource<T> extends DataSource<T>{
+  page$: Observable<any>;
+  loadingSubject$: Observable<boolean>;
+  abstract load(request: any): void;
 }

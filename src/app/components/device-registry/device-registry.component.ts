@@ -84,7 +84,7 @@ export class DeviceRegistryComponent implements OnInit, OnDestroy {
 
   private loadDevices() {
     this.selectAllDevicesCheckBoxChange(false, true);
-    this.deviceDataSource.loadDevices(this.paramRequest);
+    this.deviceDataSource.load(this.paramRequest);
   }
 
   getServerData($event: PageEvent) {

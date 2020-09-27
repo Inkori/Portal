@@ -40,7 +40,7 @@ export class DeviceModalComponent implements OnInit, OnDestroy {
     this.isRealmSelected = this.accManagement.isRealmSelected();
     this.paramRequest = Object.assign({}, DEFAULT_DEVICE_PARAM_REQUEST);
     this.dataSource = new DeviceDataSource(this.deviceProfileService);
-    this.dataSource.loadDevices(DEFAULT_DEVICE_PARAM_REQUEST);
+    this.dataSource.load(DEFAULT_DEVICE_PARAM_REQUEST);
     this.dataSource.loadingSubject$.pipe( takeUntil(this.subscriptions$) ).subscribe(value => this.loading = value);
     this.accManagement.currentRealm$.pipe(takeUntil(this.subscriptions$)).subscribe(data => {
       this.isRealmSelected = !!data;
@@ -103,7 +103,7 @@ export class DeviceModalComponent implements OnInit, OnDestroy {
 
   private loadDevices() {
     this.selectAllCheckBoxes(false, true);
-    this.dataSource.loadDevices(this.paramRequest);
+    this.dataSource.load(this.paramRequest);
   }
 
   getServerData($event: PageEvent) {

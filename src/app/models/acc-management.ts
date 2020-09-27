@@ -86,3 +86,8 @@ export class GroupsResponse {
   page: PageInner;
   _embedded: any;
 }
+export class DevicesResponse {
+  page: PageInner;
+  content: any;
+}
+
