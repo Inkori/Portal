@@ -1,15 +1,14 @@
 import {DataSource} from '@angular/cdk/collections';
 import {Observable, Subject} from 'rxjs';
-import {Page} from '../../models/common';
 import {finalize, pluck, takeUntil} from 'rxjs/operators';
 import {OnDestroy} from '@angular/core';
 import {AccountManagementService} from '../../services/account-management.service';
-import {Group, GroupsPageRequest} from '../../models/acc-management';
+import {Group, GroupsPageRequest, GroupsResponse} from '../../models/acc-management';
 
 export class GroupsDataSource<T> implements DataSource<Group>, OnDestroy {
   private readonly subscriptions$ = new Subject<void>();
   private loadingSubject = new Subject<boolean>();
-  private groupsSubject = new Subject<Page<Group>>();
+  private groupsSubject = new Subject<GroupsResponse>();
 
   public page$ = this.groupsSubject.asObservable();
   public loadingSubject$ = this.loadingSubject.asObservable();

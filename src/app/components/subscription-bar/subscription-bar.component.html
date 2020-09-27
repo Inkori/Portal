@@ -7,7 +7,7 @@
     </div>
 
     <a mat-button class="companyName" routerLink="/">
-      <span>LCP Home</span>
+      <span>LCP</span>
     </a>
     <span class="spacer"></span>
 
@@ -34,19 +34,19 @@
              mat-list-item class="pointer"
              (click)="setSubscription(item)"
              routerLinkActive="list-item-active">
-            <!--            <mat-icon matListIcon> subscriptions </mat-icon>-->
             {{ item.name }}
           </a>
         </mat-menu>
-
-        <a *ngFor="let item of myRoutes"
-           mat-list-item
-           (click)="sidenav.close()"
-           [routerLink]="[item.path]"
-           routerLinkActive="list-item-active">
-          <mat-icon matListIcon> {{ item.data.ico }} </mat-icon>
-          {{ item.data.title }}
-        </a>
+        <div *ngIf="currentSubscription">
+          <a *ngFor="let item of myRoutes"
+             mat-list-item
+             (click)="sidenav.close()"
+             [routerLink]="[item.path]"
+             routerLinkActive="list-item-active">
+            <mat-icon matListIcon> {{ item.data.ico }} </mat-icon>
+            {{ item.data.title }}
+          </a>
+        </div>
 
       </mat-nav-list>
     </mat-sidenav>

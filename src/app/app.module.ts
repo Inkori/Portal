@@ -5,7 +5,6 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {HomePageComponent} from './components/home-page/home-page.component';
 import {DevicesComponent} from './components/devices/devices.component';
-import {SystemUpdatesComponent} from './components/system-updates/system-updates.component';
 import {DeviceRegistryComponent} from './components/device-registry/device-registry.component';
 import {DeviceGroupsComponent} from './components/device-groups/device-groups.component';
 import {ErrorPageComponent} from './components/error-page/error-page.component';
@@ -37,6 +36,7 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {GroupsModalComponent} from './components/modals/groups-modal/groups-modal.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {TableComponent} from './components/table/table.component';
+import {DeviceModalComponent} from './components/modals/device-modal/device-modal.component';
 
 
 @NgModule({
@@ -44,7 +44,6 @@ import {TableComponent} from './components/table/table.component';
     AppComponent,
     HomePageComponent,
     DevicesComponent,
-    SystemUpdatesComponent,
     DeviceRegistryComponent,
     DeviceGroupsComponent,
     ErrorPageComponent,
@@ -53,6 +52,7 @@ import {TableComponent} from './components/table/table.component';
     AddDeviceModalComponent,
     GroupsModalComponent,
     TableComponent,
+    DeviceModalComponent,
   ],
   imports: [
     HttpClientModule,
@@ -86,7 +86,7 @@ import {TableComponent} from './components/table/table.component';
     {provide: HTTP_INTERCEPTORS, useClass: SubscriptionInterceptor, multi: true},
   ],
   bootstrap: [AppComponent],
-  entryComponents: [AddDeviceModalComponent, GroupsModalComponent]
+  entryComponents: [AddDeviceModalComponent, GroupsModalComponent, DeviceModalComponent]
 })
 export class AppModule {
 }

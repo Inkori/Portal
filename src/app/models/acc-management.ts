@@ -1,3 +1,5 @@
+import {PageInner} from './common';
+
 export enum OrgType {
   FREE = 'FREE',
   COMMERCIAL = 'COMMERCIAL',
@@ -80,4 +82,7 @@ export class Group {
   users: string[];
 }
 
-
+export class GroupsResponse {
+  page: PageInner;
+  _embedded: any;
+}

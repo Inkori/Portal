@@ -22,21 +22,21 @@
 
     </mat-table>
 
-    <div *ngIf="dataSource.page$ | async as page">
-      <div *ngIf="!loading && page.totalElements<1 && !paramRequest.freeText"><p>This organisation doesn't have groups</p></div>
+    <div *ngIf="dataSource.page$ | async as response">
+      <div *ngIf="!loading && response.page.totalElements<1"><p>This organisation doesn't have groups</p></div>
       <mat-paginator #paginator
                      [pageSize]="paramRequest.pageSize"
                      [pageSizeOptions]="[1, 5, 10, 20]"
-                     [length]="page.totalElements"
-                     [pageIndex]="page.number"
+                     [length]="response.page.totalElements"
+                     [pageIndex]="response.page.number"
                      (page)="getServerData($event)"
                      [showFirstLastButtons]="true">>
       </mat-paginator>
     </div>
-  </div>
 
-  <mat-dialog-actions class="footer-block">
-    <button class="mat-raised-button" (click)="close()">Close</button>
-    <button [disabled]="selectedIds.length<1" class="mat-raised-button mat-primary" (click)="submit()">Assign</button>
-  </mat-dialog-actions>
+    <mat-dialog-actions class="footer-block">
+      <button class="mat-raised-button" (click)="close()">Close</button>
+      <button [disabled]="selectedIds.length<1" class="mat-raised-button mat-primary" (click)="submit()">Assign</button>
+    </mat-dialog-actions>
+  </div>
 </div>

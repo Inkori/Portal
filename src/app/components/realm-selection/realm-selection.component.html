@@ -1,7 +1,7 @@
 <div *ngIf="isSubscriptionSelected; else subscription">
   <p *ngIf="!isRealmSelected">Please select an organization</p>
   <div [ngClass]="{'little': isRealmSelected}">
-
+    <div *ngIf="isRealmSelected" class="center">{{ pageName }}</div>
     <button mat-button class="btn" *ngIf="isRealmSelected" (click)="reloadPage()">
       <span>Reload</span>
     </button>
@@ -20,6 +20,4 @@
     </mat-menu>
   </div>
 </div>
-<ng-template #subscription>
-  Please select a subscription
-</ng-template>
+<ng-template #subscription>Please select a subscription</ng-template>

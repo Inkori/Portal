@@ -1,8 +1,7 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {AccountManagementService} from '../../services/account-management.service';
 import {AuthService} from '../../services/auth.service';
 import {Organization} from '../../models/acc-management';
-import {DeviceProfileService} from '../../services/device-profile.service';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
@@ -20,11 +19,13 @@ export class RealmSelectionComponent implements OnInit, OnDestroy {
 
   constructor(
     private auth: AuthService,
-    private accManagement: AccountManagementService,
-    private deviceProfileService: DeviceProfileService) {
+    private accManagement: AccountManagementService) {
   }
 
+  @Input() pageName: string;
+
   ngOnInit(): void {
+
     this.realmList = this.accManagement.getRealmsInOrg();
     this.isSubscriptionSelected = this.accManagement.isSubscriptionSelected();
     this.isRealmSelected = this.accManagement.isRealmSelected();
@@ -60,6 +61,6 @@ export class RealmSelectionComponent implements OnInit, OnDestroy {
   }
 
   reloadPage() {
-    this.deviceProfileService.reloadDevicesForCurrentOrg();
+    this.accManagement.reloadRage();
   }
 }

@@ -16,3 +16,21 @@ body {
   color: #211b19;
   font-weight: bold;
 }
+.hide{
+  visibility: hidden;
+}
+
+.spinner-center{
+  position: absolute;
+  left: 50%;
+  top: 200px;
+}
+
+.little {
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 1px;
+  height: 40px;
+  /*width: 70px;*/
+}
+

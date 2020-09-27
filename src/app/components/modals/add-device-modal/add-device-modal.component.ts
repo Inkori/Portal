@@ -1,11 +1,9 @@
 import {Component, Inject} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {FormBuilder, FormGroup} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ADD_DEVICE_FORM} from '../../../common/form-constants';
-import {AIM_ALL} from '../../../common/constants';
 import {DeviceProfileService} from '../../../services/device-profile.service';
 import {FormService} from '../../../services/form.service';
-import {FormSupplier} from '../../../models/common';
 
 @Component({
   selector: 'app-add-device-modal',
@@ -16,7 +14,6 @@ export class AddDeviceModalComponent {
   registrationType: string;
   form: FormGroup;
   addDeviceProps = [];
-  formDataObj = ADD_DEVICE_FORM;
 
   constructor(private formBuilder: FormBuilder,
               private dialogRef: MatDialogRef<AddDeviceModalComponent>,

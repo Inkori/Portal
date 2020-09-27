@@ -1,4 +1,4 @@
-<app-realm-selection></app-realm-selection>
+<app-realm-selection [pageName]="pageName"></app-realm-selection>
 
 <div class="mat-elevation-z8">
   <div class="spinner-container spinner-center" *ngIf="loading">
@@ -14,7 +14,7 @@
     </button>
     <div class="little">
       <mat-icon matPrefix>search</mat-icon>
-      <input matInput #searchInput (keyup.enter)="searchBy(searchInput.value)" type="text" placeholder="Search">
+      <input matInput #searchInput (keyup.enter)="searchBy(searchInput.value)" type="text" placeholder="Search" autocomplete="off">
     </div>
     <mat-table class="mat-elevation-z8" [dataSource]="deviceDataSource">
 
@@ -58,8 +58,8 @@
 
     </mat-table>
     <div *ngIf="deviceDataSource.page$ | async as page">
-      <div *ngIf="isRealmSelected && !loading && page.totalElements<1 && !paramRequest.freeText"><p>This organisation doesn't have devices</p></div>
-      <div *ngIf="isRealmSelected && !loading && page.totalElements<1 && paramRequest.freeText"><p>Device with current search params doesn't exist</p></div>
+      <div *ngIf="isRealmSelected && !loading && !page.totalElements && !paramRequest.freeText"><p>This organisation doesn't have devices</p></div>
+      <div *ngIf="isRealmSelected && !loading && !page.totalElements && paramRequest.freeText"><p>Device with current search params doesn't exist</p></div>
       <mat-paginator #paginator
                      [pageSize]="paramRequest.pageSize"
                      [pageSizeOptions]="[1, 5, 10, 20]"

@@ -3,6 +3,10 @@
   justify-content: flex-end;
   margin-right: 1px;
 }
+.center{
+  position: absolute;
+  left: 45%;
+}
 .btn {
   height: 40px;
   top: 1px;

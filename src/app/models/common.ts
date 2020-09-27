@@ -4,10 +4,18 @@ export interface Page<T> {
   readonly number: number;
   readonly size: number;
   readonly content?: T[];
-  readonly _embedded?: { [key: string]: T[] };
+  readonly _embedded?: T[];
   readonly totalElements: number;
   readonly totalPages: number;
 }
+
+export interface PageInner {
+  readonly number: number;
+  readonly size: number;
+  readonly totalElements: number;
+  readonly totalPages: number;
+}
+
 
 export interface ParamRequest {
   pageNumber?: number;
@@ -36,11 +44,6 @@ export interface AddDeviceModalRequest {
 
 export interface DeviceIdInfo {
   deviceId: string;
-}
-
-export interface AddGroupRequest {
-  deviceAddParamList: DeviceIdInfo[];
-  groupParamList: [];
 }
 
 export interface FormSupplier {

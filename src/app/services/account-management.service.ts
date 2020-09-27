@@ -3,7 +3,7 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {Environment} from '../../environments/environment';
 import {ORG_REALMS, REALM, SUBSCRIPTION_ID} from '../common/constants';
 import {Subscription} from '../models/subscription';
-import {Group, GroupsPageRequest, Organization} from '../models/acc-management';
+import {GroupsPageRequest, GroupsResponse, Organization} from '../models/acc-management';
 import {pluck} from 'rxjs/operators';
 import {Observable, Subject} from 'rxjs';
 import {DeviceIdInfo, Page} from '../models/common';
@@ -16,6 +16,7 @@ export class AccountManagementService {
   currentSubscription$ = new Subject<Subscription>();
   currentRealm$ = new Subject<Organization>();
   orgListUpdateEvent$ = new Subject<Subscription>();
+  reloadPage$ = new Subject<boolean>();
 
   constructor(private http: HttpClient) {
     this.url = Environment.portalUrl + '/lcp-account-management/apis/v1';
@@ -30,9 +31,9 @@ export class AccountManagementService {
         pluck('_embedded', 'organizationList'));
   }
 
-  getGroupsList(pageRequest: GroupsPageRequest): Observable<Page<Group>> {
+  getGroupsList(pageRequest: GroupsPageRequest): Observable<GroupsResponse> {
     const params = this.getHttpParams(pageRequest);
-    return this.http.get<Page<Group>>(this.url + '/groups', {params});
+    return this.http.get<GroupsResponse>(this.url + '/groups', {params});
   }
 
   assignGroupsBulk(deviceAddParamList: DeviceIdInfo[], groupParamList: string[]): Observable<void> {
@@ -43,6 +44,9 @@ export class AccountManagementService {
     this.orgListUpdateEvent$.next(subscription);
   }
 
+  reloadRage(): void {
+    this.reloadPage$.next(true);
+  }
   setSubscription(subscription: Subscription) {
     localStorage.setItem(SUBSCRIPTION_ID, JSON.stringify(subscription));
     this.currentSubscription$.next(subscription);
@@ -89,7 +93,8 @@ export class AccountManagementService {
       .set('pageNumber', `${pageRequest.pageNumber}`)
       .set('pageSize', `${pageRequest.pageSize}`)
       .set('sortByPropertyList', pageRequest.sortByProperty)
-      .set('sortByDirection', `${pageRequest.sortByDirection ? 'ASC' : 'DESC'}`);
+      .set('sortByDirection', `${pageRequest.sortByDirection ? 'ASC' : 'DESC'}`)
+      .set('freeText', `${pageRequest.freeText}`);
   }
 }
 

@@ -39,7 +39,7 @@ export const DEFAULT_DEVICE_PARAM_REQUEST: ParamRequest = Object.freeze({
   pageNumber: 0, pageSize: 7, sortByProperty: 'deviceName', sortByDirection: ASC, freeText: ''
 });
 export const DEFAULT_GROUP_PARAM_REQUEST: GroupsPageRequest = {
-  'type': GroupType.DEVICE, 'activityState' : 'ACTIVE', 'pageNumber': 0, 'pageSize': 5, 'sortByProperty': 'displayName', 'sortByDirection': true
+  'type': GroupType.DEVICE, activityState : 'ACTIVE', pageNumber: 0, pageSize: 5, sortByProperty: 'displayName', sortByDirection: true, freeText: '',
 }
 
 // entity type

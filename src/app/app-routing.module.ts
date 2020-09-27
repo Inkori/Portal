@@ -4,7 +4,6 @@ import {DeviceGroupsComponent} from './components/device-groups/device-groups.co
 import {HomePageComponent} from './components/home-page/home-page.component';
 import {DeviceRegistryComponent} from './components/device-registry/device-registry.component';
 import {DevicesComponent} from './components/devices/devices.component';
-import {SystemUpdatesComponent} from './components/system-updates/system-updates.component';
 import {ErrorPageComponent} from './components/error-page/error-page.component';
 import {AppAuthGuard} from './guards/app-auth-guard';
 
@@ -21,11 +20,6 @@ export const routes: Routes = [
     component: DeviceGroupsComponent,
     canActivate: [AppAuthGuard],
     data: {ico: 'groups', title: 'Groups'}
-  },
-  {path: 'system-updates',
-    component: SystemUpdatesComponent,
-    canActivate: [AppAuthGuard],
-    data: {ico: 'system_update', title: 'System updates'}
   },
   {path: 'registry',
     component: DeviceRegistryComponent,

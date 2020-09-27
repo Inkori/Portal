@@ -13,10 +13,12 @@ import {
   DEVICE_ADD_ERROR_MESSAGE,
   DEVICE_ADD_MESSAGE,
   DEVICE_DELETE_ERROR_MESSAGE,
-  DEVICE_DELETE_MESSAGE, GROUP_ADD_ERROR_MESSAGE, GROUP_ADD_MESSAGE
+  DEVICE_DELETE_MESSAGE,
+  GROUP_ADD_ERROR_MESSAGE,
+  GROUP_ADD_MESSAGE
 } from '../../common/constants';
 import {DeviceDataSource} from '../data-source/device-data-source';
-import {AddDeviceModalRequest, DeviceIdInfo, Page, ParamRequest} from '../../models/common';
+import {AddDeviceModalRequest, Page, ParamRequest} from '../../models/common';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {AddDeviceModalComponent} from '../modals/add-device-modal/add-device-modal.component';
 import {AlertService} from '../../services/alert.service';
@@ -38,6 +40,7 @@ export class DevicesComponent implements OnInit, OnDestroy {
   displayedColumns = ['selectDevice', 'status', 'deviceDisplayName', 'deviceSerialnumber', 'groups'];
   selectedDeviceIds: string[] = [];
   selectAllDeviceIds = false;
+  pageName = 'Device page';
 
   constructor(
     private dialog: MatDialog,
@@ -63,7 +66,7 @@ export class DevicesComponent implements OnInit, OnDestroy {
       }
     });
     this.deviceDataSource.loadingSubject$.pipe(takeUntil(this.subscriptions$)).subscribe(value => this.loading = value);
-    this.deviceProfileService.reloadDeviceList$.pipe(takeUntil(this.subscriptions$)).subscribe(() => this.loadDevices());
+    this.accManagement.reloadPage$.pipe(takeUntil(this.subscriptions$)).subscribe(() => this.loadDevices());
   }
 
   ngOnDestroy(): void {

@@ -1,12 +1,11 @@
-import {Component, ElementRef, Inject, OnInit, ViewChild, ViewChildren} from '@angular/core';
+import {Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild, ViewChildren} from '@angular/core';
 import {FormBuilder} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {AccountManagementService} from '../../../services/account-management.service';
 import {FormService} from '../../../services/form.service';
 import {DEFAULT_GROUP_PARAM_REQUEST} from '../../../common/constants';
 import {GroupsDataSource} from '../../data-source/groups-data-source';
-import {Page} from '../../../models/common';
-import {Group, GroupsPageRequest} from '../../../models/acc-management';
+import {GroupsPageRequest, GroupsResponse} from '../../../models/acc-management';
 import {PageEvent} from '@angular/material/paginator';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
@@ -16,9 +15,9 @@ import {takeUntil} from 'rxjs/operators';
   templateUrl: './groups-modal.component.html',
   styleUrls: ['./groups-modal.component.css']
 })
-export class GroupsModalComponent implements OnInit {
+export class GroupsModalComponent implements OnInit, OnDestroy {
   private readonly subscriptions$ = new Subject<void>();
-  dataSource: GroupsDataSource<Page<Group>>;
+  dataSource: GroupsDataSource<GroupsResponse>;
   displayedColumns = ['groupId', 'groups'];
   paramRequest: GroupsPageRequest;
   loading: boolean;
@@ -41,6 +40,11 @@ export class GroupsModalComponent implements OnInit {
     this.dataSource = new GroupsDataSource(this.accountManagementService);
     this.dataSource.loadGroups(DEFAULT_GROUP_PARAM_REQUEST);
     this.dataSource.loadingSubject$.pipe( takeUntil(this.subscriptions$) ).subscribe(value => this.loading = value);
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions$.next();
+    this.subscriptions$.complete();
   }
 
   close() {
