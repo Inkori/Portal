@@ -30,7 +30,7 @@ import {MatSortModule} from '@angular/material/sort';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatDialogModule} from '@angular/material/dialog';
-import {AddDeviceModalComponent} from './components/modals/add-device-modal/add-device-modal.component';
+import {AddModalComponent} from './components/modals/add-modal/add-modal.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatCheckboxModule} from '@angular/material/checkbox';
@@ -48,7 +48,7 @@ import {ListModalComponent} from './components/modals/list-modal/list-modal.comp
     ErrorPageComponent,
     SubscriptionBarComponent,
     RealmSelectionComponent,
-    AddDeviceModalComponent,
+    AddModalComponent,
     TableComponent,
     ListModalComponent,
   ],
@@ -84,7 +84,7 @@ import {ListModalComponent} from './components/modals/list-modal/list-modal.comp
     {provide: HTTP_INTERCEPTORS, useClass: SubscriptionInterceptor, multi: true},
   ],
   bootstrap: [AppComponent],
-  entryComponents: [AddDeviceModalComponent, ListModalComponent]
+  entryComponents: [AddModalComponent, ListModalComponent]
 })
 export class AppModule {
 }

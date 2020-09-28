@@ -6,7 +6,7 @@ import {Subscription} from '../models/subscription';
 import {GroupsPageRequest, GroupsResponse, Organization} from '../models/acc-management';
 import {pluck} from 'rxjs/operators';
 import {Observable, Subject} from 'rxjs';
-import {DeviceIdInfo, Page} from '../models/common';
+import {DeviceIdInfo, GroupAddParam, GroupDeleteParam, Page} from '../models/common';
 
 @Injectable({
   providedIn: 'root'
@@ -38,6 +38,14 @@ export class AccountManagementService {
 
   assignGroupsBulk(deviceAddParamList: DeviceIdInfo[], groupParamList: string[]): Observable<void> {
     return this.http.post<void>(this.url + '/groups/devices/addBulk', {deviceAddParamList, groupParamList});
+  }
+
+  createGroup(groupAddParam: GroupAddParam): Observable<any> {
+    return this.http.post<void>(this.url + '/groups', groupAddParam);
+  }
+
+  deleteGroup(groupAddParam: GroupDeleteParam): Observable<any> {
+    return this.http.patch<void>(this.url + '/groups', groupAddParam);
   }
 
   sendOrgUpdateEvent(subscription: Subscription) {

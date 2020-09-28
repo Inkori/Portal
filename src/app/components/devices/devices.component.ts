@@ -1,14 +1,14 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {AccountManagementService} from '../../services/account-management.service';
 import {DeviceProfileService} from '../../services/device-profile.service';
-import {AddDeviceModalRequest, DataSourceType} from '../../models/common';
+import {AddDeviceModalRequest, DataType} from '../../models/common';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {AlertService} from '../../services/alert.service';
 import {HttpErrorResponse} from '@angular/common/http';
 import {takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
 import {saveAs} from 'file-saver';
-import {AddDeviceModalComponent} from '../modals/add-device-modal/add-device-modal.component';
+import {AddModalComponent} from '../modals/add-modal/add-modal.component';
 import {TableComponent} from '../table/table.component';
 import {
   AIM_AUTO,
@@ -28,7 +28,7 @@ export class DevicesComponent implements OnInit, OnDestroy {
   isRealmSelected: boolean;
   selectedIds: string[] = [];
   pageName = 'Device page';
-  dataSourceType = DataSourceType.DEVICE;
+  dataSourceType = DataType.DEVICE;
   @ViewChild(TableComponent) tableComponent: TableComponent;
 
   constructor(
@@ -68,8 +68,8 @@ export class DevicesComponent implements OnInit, OnDestroy {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
-    const dialogRef = this.dialog.open(AddDeviceModalComponent, dialogConfig);
-    dialogRef.afterClosed().subscribe(
+    const dialogRef = this.dialog.open(AddModalComponent, dialogConfig);
+    dialogRef.afterClosed().pipe(takeUntil(this.subscriptions$)).subscribe(
       data => this.addDeviceToPortal(data)
     );
   }
@@ -107,7 +107,7 @@ export class DevicesComponent implements OnInit, OnDestroy {
   }
 
   assignGroup() {
-    this.tableComponent.assign(DataSourceType.GROUP);
+    this.tableComponent.assign(DataType.GROUP);
   }
 
   private showAlertMessage(message: string, error?: HttpErrorResponse) {

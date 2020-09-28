@@ -48,12 +48,23 @@ export interface DeviceIdInfo {
   deviceId: string;
 }
 
+export interface GroupAddParam {
+  disableIdentityIntegration: boolean,
+  displayName: string,
+  name: string,
+  type: string
+}
+
+export interface GroupDeleteParam {
+  groupList: string[]
+}
+
 export interface FormSupplier {
   form: FormGroup;
   props: Array<any>;
 }
 
-export enum DataSourceType {
+export enum DataType {
   DEVICE,
   GROUP,
 }

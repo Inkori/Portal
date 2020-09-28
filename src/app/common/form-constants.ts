@@ -1,11 +1,10 @@
 import {Validators} from '@angular/forms';
 import {
   AIM_AUTO,
+  COMMON_NAME_ERROR_MESSAGE,
+  COMMON_NAME_REGEXP,
   DEVICE_COMMON_UPPER_CASE_ERROR_MESSAGE,
   DEVICE_COMMON_UPPER_CASE_REGEXP,
-  DEVICE_NAME_ERROR_MESSAGE,
-  DEVICE_NAME_REGEXP,
-  TYPE_CHECKBOX,
   TYPE_TEXT
 } from './constants';
 
@@ -15,10 +14,10 @@ export const ADD_DEVICE_FORM = {
     type: TYPE_TEXT,
     aim: '',
     validators: [
-      Validators.pattern(DEVICE_NAME_REGEXP),
+      Validators.pattern(COMMON_NAME_REGEXP),
     ],
     errorMessages: {
-      regex: DEVICE_NAME_ERROR_MESSAGE
+      regex: COMMON_NAME_ERROR_MESSAGE
     }
   },
   activationCode: {
@@ -47,12 +46,16 @@ export const ADD_DEVICE_FORM = {
   }
 };
 
-export const GROUP_LIST_FORM = {
-  groupId: {
-    label: 'groupId',
-    type: TYPE_CHECKBOX,
+export const ADD_GROUP_FORM = {
+  groupName: {
+    label: 'Group name',
+    type: TYPE_TEXT,
     aim: '',
-    validators: [],
-    errorMessages: {}
+    validators: [Validators.required,
+      Validators.pattern(COMMON_NAME_REGEXP),
+    ],
+    errorMessages: {
+      regex: DEVICE_COMMON_UPPER_CASE_ERROR_MESSAGE
+    }
   }
 };

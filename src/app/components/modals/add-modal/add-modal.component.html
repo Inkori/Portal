@@ -6,9 +6,9 @@
   </div>
 
   <form *ngIf="registrationType" [formGroup]="form" (submit)="submit()">
-    <h2 mat-dialog-title>{{ registrationType }} registration</h2>
+    <h2 mat-dialog-title *ngIf="registrationType">{{ getTitle() }}</h2>
 
-    <div class="add-form" *ngFor="let prop of addDeviceProps">
+    <div class="add-form" *ngFor="let prop of addProps">
       <mat-form-field class="wide">
         <mat-label>{{ prop.label }}</mat-label>
         <input [type]="prop.type" matInput formControlName="{{ prop.key }}">
@@ -29,7 +29,7 @@
 
   <mat-dialog-actions class="footer-block">
     <button class="mat-raised-button" (click)="close()">Close</button>
-    <button *ngIf="registrationType" class="mat-raised-button" (click)="registrationTypeChange('')">Back</button>
-    <button *ngIf="registrationType" [disabled]="form.invalid" class="mat-raised-button mat-primary" (click)="submit()">Add device</button>
+    <button *ngIf="registrationType && registrationType !== 'GROUP'" class="mat-raised-button" (click)="registrationTypeChange('')">Back</button>
+    <button *ngIf="registrationType" [disabled]="form.invalid" class="mat-raised-button mat-primary" (click)="submit()">Submit</button>
   </mat-dialog-actions>
 </div>

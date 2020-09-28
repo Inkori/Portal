@@ -1,5 +1,5 @@
 import {Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, ViewChildren} from '@angular/core';
-import {CommonDataSource, DataSourceType} from '../../models/common';
+import {CommonDataSource, DataType} from '../../models/common';
 import {takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
 import {GroupsDataSource} from '../data-source/groups-data-source';
@@ -10,8 +10,8 @@ import {
   DEVICE_LIST_EMPTY_MESSAGE,
   DEVICE_SEARCH_RESPONSE_EMPTY_MESSAGE,
   DEVICE_TABLE_COLUMNS,
-  GROUP_ADD_ERROR_MESSAGE,
-  GROUP_ADD_MESSAGE,
+  GROUP_ASSIGN_ERROR_MESSAGE,
+  GROUP_ASSIGN_MESSAGE,
   GROUP_LIST_EMPTY_MESSAGE,
   GROUP_SEARCH_RESPONSE_EMPTY_MESSAGE,
   GROUP_TABLE_COLUMNS
@@ -44,7 +44,7 @@ export class TableComponent implements OnInit, OnDestroy {
   @ViewChild('searchInput') searchInput: ElementRef;
   @ViewChild('checkAll') checkAllBoxes: ElementRef;
   @ViewChildren('check') checkBoxes: ElementRef[];
-  @Input() dataSourceType: DataSourceType;
+  @Input() dataSourceType: DataType;
   @Output() idListEmitter = new EventEmitter<string[]>();
 
 
@@ -75,14 +75,14 @@ export class TableComponent implements OnInit, OnDestroy {
   }
 
   private initDependsOnDataSourceType(): void {
-    if (DataSourceType.DEVICE === this.dataSourceType) {
+    if (DataType.DEVICE === this.dataSourceType) {
       this.displayedColumns = DEVICE_TABLE_COLUMNS;
       this.paramRequest = Object.assign({}, DEFAULT_DEVICE_PARAM_REQUEST);
       this.defaultParamRequest = Object.assign({}, DEFAULT_DEVICE_PARAM_REQUEST);
       this.emptyListMessage = DEVICE_LIST_EMPTY_MESSAGE;
       this.emptySearchResponseMessage = DEVICE_SEARCH_RESPONSE_EMPTY_MESSAGE;
       this.dataSource = new DeviceDataSource(this.deviceProfileService);
-    } else if (DataSourceType.GROUP === this.dataSourceType) {
+    } else if (DataType.GROUP === this.dataSourceType) {
       this.displayedColumns = GROUP_TABLE_COLUMNS;
       this.paramRequest = Object.assign({}, DEFAULT_GROUP_PARAM_REQUEST);
       this.defaultParamRequest = Object.assign({}, DEFAULT_GROUP_PARAM_REQUEST);
@@ -168,13 +168,13 @@ export class TableComponent implements OnInit, OnDestroy {
     this.load();
   }
 
-  assign(type: DataSourceType) {
+  assign(type: DataType) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.data = {type: type};
     const dialogRef = this.dialog.open(ListModalComponent, dialogConfig);
-    dialogRef.afterClosed().subscribe(
+    dialogRef.afterClosed().pipe(takeUntil(this.subscriptions$)).subscribe(
       data => {
         if (data) {
           this.assignGroupToDeviceBulk(data);
@@ -190,9 +190,9 @@ export class TableComponent implements OnInit, OnDestroy {
           this.paramRequest.pageNumber = 0;
           this.paramRequest.freeText = '';
           this.load(this.defaultParamRequest);
-          this.alertService.showAlertMessage(GROUP_ADD_MESSAGE);
+          this.alertService.showAlertMessage(GROUP_ASSIGN_MESSAGE);
         },
-        error: (error) => this.alertService.showAlertMessage(GROUP_ADD_ERROR_MESSAGE, error)
+        error: (error) => this.alertService.showAlertMessage(GROUP_ASSIGN_ERROR_MESSAGE, error)
       });
   }
 

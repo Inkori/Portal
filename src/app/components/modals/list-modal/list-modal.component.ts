@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {DataSourceType} from '../../../models/common';
+import {DataType} from '../../../models/common';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
 @Component({
@@ -9,7 +9,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 })
 export class ListModalComponent implements OnInit {
   selectedIds = [];
-  dataSourceType: DataSourceType;
+  dataSourceType: DataType;
 
   constructor(private dialogRef: MatDialogRef<ListModalComponent>, @Inject(MAT_DIALOG_DATA) private data: any) {
   }
