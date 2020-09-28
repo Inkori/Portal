@@ -13,7 +13,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
   dataSourceType = DataSourceType.GROUP;
   selectedIds = [];
 
-  @ViewChild(TableComponent) child: TableComponent;
+  @ViewChild(TableComponent) tableComponent: TableComponent;
 
   constructor(private dialog: MatDialog) {
   }
@@ -29,7 +29,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
   }
 
   assign() {
-   this.child.assign();
+   this.tableComponent.assign(DataSourceType.DEVICE);
   }
 
 }

@@ -1,7 +1,0 @@
-<div class="modal">
-  <app-table [dataSourceType]="tableType" (idListEmitter)="getIdList($event)"></app-table>
-  <mat-dialog-actions class="footer-block">
-    <button class="mat-raised-button" (click)="close()">Close</button>
-    <button [disabled]="selectedIds.length<1" class="mat-raised-button mat-primary" (click)="submit()">Assign</button>
-  </mat-dialog-actions>
-</div>

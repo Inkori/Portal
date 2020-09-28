@@ -3,7 +3,6 @@ import {CommonDataSource, DataSourceType} from '../../models/common';
 import {takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
 import {GroupsDataSource} from '../data-source/groups-data-source';
-import {GroupsPageRequest} from '../../models/acc-management';
 import {AccountManagementService} from '../../services/account-management.service';
 import {
   DEFAULT_DEVICE_PARAM_REQUEST,
@@ -19,7 +18,7 @@ import {
 } from '../../common/constants';
 import {PageEvent} from '@angular/material/paginator';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import {DeviceModalComponent} from '../modals/device-modal/device-modal.component';
+import {ListModalComponent} from '../modals/list-modal/list-modal.component';
 import {AlertService} from '../../services/alert.service';
 import {DeviceDataSource} from '../data-source/device-data-source';
 import {DeviceProfileService} from '../../services/device-profile.service';
@@ -147,7 +146,7 @@ export class TableComponent implements OnInit, OnDestroy {
     this.paramRequest.pageNumber = data.pageIndex;
   }
 
-  private load(paramRequest?: GroupsPageRequest) {
+  load(paramRequest?: any) {
     // this.selectAllCheckBoxes(false, true);
     this.dataSource.load(paramRequest ? paramRequest : this.paramRequest);
     this.dataSource.page$.subscribe(() => this.activateCheckBoxes());
@@ -169,11 +168,12 @@ export class TableComponent implements OnInit, OnDestroy {
     this.load();
   }
 
-  assign() {
+  assign(type: DataSourceType) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
-    const dialogRef = this.dialog.open(DeviceModalComponent, dialogConfig);
+    dialogConfig.data = {type: type};
+    const dialogRef = this.dialog.open(ListModalComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(
       data => {
         if (data) {

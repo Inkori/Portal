@@ -33,10 +33,9 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {AddDeviceModalComponent} from './components/modals/add-device-modal/add-device-modal.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
-import {GroupsModalComponent} from './components/modals/groups-modal/groups-modal.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {TableComponent} from './components/table/table.component';
-import {DeviceModalComponent} from './components/modals/device-modal/device-modal.component';
+import {ListModalComponent} from './components/modals/list-modal/list-modal.component';
 
 
 @NgModule({
@@ -50,9 +49,8 @@ import {DeviceModalComponent} from './components/modals/device-modal/device-moda
     SubscriptionBarComponent,
     RealmSelectionComponent,
     AddDeviceModalComponent,
-    GroupsModalComponent,
     TableComponent,
-    DeviceModalComponent,
+    ListModalComponent,
   ],
   imports: [
     HttpClientModule,
@@ -86,7 +84,7 @@ import {DeviceModalComponent} from './components/modals/device-modal/device-moda
     {provide: HTTP_INTERCEPTORS, useClass: SubscriptionInterceptor, multi: true},
   ],
   bootstrap: [AppComponent],
-  entryComponents: [AddDeviceModalComponent, GroupsModalComponent, DeviceModalComponent]
+  entryComponents: [AddDeviceModalComponent, ListModalComponent]
 })
 export class AppModule {
 }

@@ -1,6 +1,7 @@
 <div class="spinner-container spinner-center" *ngIf="loading">
   <mat-spinner></mat-spinner>
 </div>
+<!--  Use hide instead of *ngIf because element will not be load after subscription switch-->
 <div [ngClass]="{'hide': loading || !isRealmSelected}">
   <div class="little">
     <mat-icon matPrefix>search</mat-icon>
