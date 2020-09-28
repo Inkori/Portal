@@ -1,6 +1,0 @@
-<app-realm-selection [pageName]="pageName"></app-realm-selection>
-
-<button mat-button class="btn" (click)="createGroup()"><span>Create group</span></button>
-<button mat-button class="btn" [disabled]="!selectedIds.length" (click)="assign()"><span>Assign</span></button>
-<button mat-button class="btn" [disabled]="!selectedIds.length" (click)="delete()"><span>Delete</span></button>
-<app-table [dataSourceType]="dataSourceType" (idListEmitter)="getIdList($event)"></app-table>

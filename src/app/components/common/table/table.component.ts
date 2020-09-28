@@ -1,9 +1,9 @@
 import {Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, ViewChildren} from '@angular/core';
-import {CommonDataSource, DataType} from '../../models/common';
+import {CommonDataSource, DataType} from '../../../models/common';
 import {takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
 import {GroupsDataSource} from '../data-source/groups-data-source';
-import {AccountManagementService} from '../../services/account-management.service';
+import {AccountManagementService} from '../../../services/account-management.service';
 import {
   DEFAULT_DEVICE_PARAM_REQUEST,
   DEFAULT_GROUP_PARAM_REQUEST,
@@ -15,13 +15,13 @@ import {
   GROUP_LIST_EMPTY_MESSAGE,
   GROUP_SEARCH_RESPONSE_EMPTY_MESSAGE,
   GROUP_TABLE_COLUMNS
-} from '../../common/constants';
+} from '../../../common/constants';
 import {PageEvent} from '@angular/material/paginator';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import {ListModalComponent} from '../modals/list-modal/list-modal.component';
-import {AlertService} from '../../services/alert.service';
+import {ListModalComponent} from '../../modals/list-modal/list-modal.component';
+import {AlertService} from '../../../services/alert.service';
 import {DeviceDataSource} from '../data-source/device-data-source';
-import {DeviceProfileService} from '../../services/device-profile.service';
+import {DeviceProfileService} from '../../../services/device-profile.service';
 
 @Component({
   selector: 'app-table',

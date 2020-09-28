@@ -1,18 +1,18 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {DataType} from '../../models/common';
+import {DataType} from '../../../models/common';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import {TableComponent} from '../table/table.component';
-import {AddModalComponent} from '../modals/add-modal/add-modal.component';
+import {TableComponent} from '../../common/table/table.component';
+import {AddModalComponent} from '../../modals/add-modal/add-modal.component';
 import {
   GROUP_CREATE_ERROR_MESSAGE,
   GROUP_CREATE_MESSAGE,
   GROUP_DELETE_ERROR_MESSAGE,
   GROUP_DELETE_MESSAGE,
   TYPE_DEVICE
-} from '../../common/constants';
+} from '../../../common/constants';
 import {takeUntil} from 'rxjs/operators';
-import {AccountManagementService} from '../../services/account-management.service';
-import {AlertService} from '../../services/alert.service';
+import {AccountManagementService} from '../../../services/account-management.service';
+import {AlertService} from '../../../services/alert.service';
 import {Subject} from 'rxjs';
 
 @Component({

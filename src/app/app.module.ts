@@ -3,11 +3,11 @@ import {APP_INITIALIZER, NgModule} from '@angular/core';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {HomePageComponent} from './components/home-page/home-page.component';
-import {DevicesComponent} from './components/devices/devices.component';
-import {DeviceRegistryComponent} from './components/device-registry/device-registry.component';
-import {GroupsComponent} from './components/groups/groups.component';
-import {ErrorPageComponent} from './components/error-page/error-page.component';
+import {HomeComponent} from './components/pages/home/home.component';
+import {DevicesComponent} from './components/pages/devices/devices.component';
+import {DeviceRegistryComponent} from './components/pages/device-registry/device-registry.component';
+import {GroupsComponent} from './components/pages/groups/groups.component';
+import {ErrorPageComponent} from './components/pages/error-page/error-page.component';
 import {KeycloakAngularModule, KeycloakService} from 'keycloak-angular';
 import {initializer} from '../appInit';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -17,10 +17,10 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatIconModule} from '@angular/material/icon';
 import {MatListModule} from '@angular/material/list';
-import {SubscriptionBarComponent} from './components/subscription-bar/subscription-bar.component';
+import {SubscriptionBarComponent} from './components/common/subscription-bar/subscription-bar.component';
 import {MatMenuModule} from '@angular/material/menu';
 import {ExtendedModule, FlexModule} from '@angular/flex-layout';
-import {RealmSelectionComponent} from './components/realm-selection/realm-selection.component';
+import {RealmSelectionComponent} from './components/common/realm-selection/realm-selection.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {SubscriptionInterceptor} from './interseptors/auth-interseptor';
 import {MatTableModule} from '@angular/material/table';
@@ -34,14 +34,14 @@ import {AddModalComponent} from './components/modals/add-modal/add-modal.compone
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatCheckboxModule} from '@angular/material/checkbox';
-import {TableComponent} from './components/table/table.component';
+import {TableComponent} from './components/common/table/table.component';
 import {ListModalComponent} from './components/modals/list-modal/list-modal.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomePageComponent,
+    HomeComponent,
     DevicesComponent,
     DeviceRegistryComponent,
     GroupsComponent,

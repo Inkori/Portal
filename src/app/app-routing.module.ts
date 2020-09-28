@@ -1,15 +1,15 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {GroupsComponent} from './components/groups/groups.component';
-import {HomePageComponent} from './components/home-page/home-page.component';
-import {DeviceRegistryComponent} from './components/device-registry/device-registry.component';
-import {DevicesComponent} from './components/devices/devices.component';
-import {ErrorPageComponent} from './components/error-page/error-page.component';
+import {GroupsComponent} from './components/pages/groups/groups.component';
+import {HomeComponent} from './components/pages/home/home.component';
+import {DeviceRegistryComponent} from './components/pages/device-registry/device-registry.component';
+import {DevicesComponent} from './components/pages/devices/devices.component';
+import {ErrorPageComponent} from './components/pages/error-page/error-page.component';
 import {AppAuthGuard} from './guards/app-auth-guard';
 
 
 export const routes: Routes = [
-  {path: '', component: HomePageComponent,
+  {path: '', component: HomeComponent,
     canActivate: [AppAuthGuard]},
   {path: 'devices',
     component: DevicesComponent,

@@ -23,7 +23,6 @@ export const REGISTRATION_TITLES = {auto: 'Auto registration', manual: 'Manual r
 
 
 // registration forms
-export const AIM_ALL = 'All';
 export const AIM_AUTO = 'Auto';
 export const TYPE_TEXT = 'text';
 export const TYPE_CHECKBOX = 'checkbox';

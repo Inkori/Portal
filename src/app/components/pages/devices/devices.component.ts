@@ -1,22 +1,21 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {AccountManagementService} from '../../services/account-management.service';
-import {DeviceProfileService} from '../../services/device-profile.service';
-import {AddDeviceModalRequest, DataType} from '../../models/common';
+import {AccountManagementService} from '../../../services/account-management.service';
+import {DeviceProfileService} from '../../../services/device-profile.service';
+import {AddDeviceModalRequest, DataType} from '../../../models/common';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import {AlertService} from '../../services/alert.service';
-import {HttpErrorResponse} from '@angular/common/http';
+import {AlertService} from '../../../services/alert.service';
 import {takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
 import {saveAs} from 'file-saver';
-import {AddModalComponent} from '../modals/add-modal/add-modal.component';
-import {TableComponent} from '../table/table.component';
+import {AddModalComponent} from '../../modals/add-modal/add-modal.component';
+import {TableComponent} from '../../common/table/table.component';
 import {
   AIM_AUTO,
   DEVICE_ADD_ERROR_MESSAGE,
   DEVICE_ADD_MESSAGE,
   DEVICE_DELETE_ERROR_MESSAGE,
   DEVICE_DELETE_MESSAGE
-} from '../../common/constants';
+} from '../../../common/constants';
 
 @Component({
   selector: 'app-devices',
@@ -57,9 +56,9 @@ export class DevicesComponent implements OnInit, OnDestroy {
         this.tableComponent.paramRequest.pageNumber = 0;
         this.tableComponent.paramRequest.freeText = '';
         this.tableComponent.load();
-        this.showAlertMessage(DEVICE_DELETE_MESSAGE);
+        this.alertService.showAlertMessage(DEVICE_DELETE_MESSAGE);
       },
-      error: (error) => this.showAlertMessage(DEVICE_DELETE_ERROR_MESSAGE, error)
+      error: (error) => this.alertService.showAlertMessage(DEVICE_DELETE_ERROR_MESSAGE, error)
     });
   }
 
@@ -86,10 +85,10 @@ export class DevicesComponent implements OnInit, OnDestroy {
         token: data.form.activationCode,
       }).pipe(takeUntil(this.subscriptions$)).subscribe({
         next: () => {
-          this.showAlertMessage(DEVICE_ADD_MESSAGE);
+          this.alertService.showAlertMessage(DEVICE_ADD_MESSAGE);
           this.tableComponent.load();
         },
-        error: error => this.showAlertMessage(DEVICE_ADD_ERROR_MESSAGE, error)
+        error: error => this.alertService.showAlertMessage(DEVICE_ADD_ERROR_MESSAGE, error)
       });
     } else {
       this.deviceProfileService.addDeviceManually([{
@@ -97,21 +96,17 @@ export class DevicesComponent implements OnInit, OnDestroy {
         deviceSerialnumber: data.form.serialNumber,
       }]).pipe(takeUntil(this.subscriptions$)).subscribe(responce => {
           saveAs(new Blob([responce]), 'devices.zip');
-          this.showAlertMessage(DEVICE_ADD_MESSAGE);
+          this.alertService.showAlertMessage(DEVICE_ADD_MESSAGE);
           this.tableComponent.load();
         },
         error => {
-          this.showAlertMessage(DEVICE_ADD_ERROR_MESSAGE, error);
+          this.alertService.showAlertMessage(DEVICE_ADD_ERROR_MESSAGE, error);
         });
     }
   }
 
   assignGroup() {
     this.tableComponent.assign(DataType.GROUP);
-  }
-
-  private showAlertMessage(message: string, error?: HttpErrorResponse) {
-    this.alertService.showAlertMessage(message, error);
   }
 
   getIdList(idList: string[]) {

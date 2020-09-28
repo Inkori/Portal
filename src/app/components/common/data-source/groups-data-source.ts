@@ -1,9 +1,9 @@
 import {Observable, Subject} from 'rxjs';
 import {finalize, pluck, takeUntil} from 'rxjs/operators';
 import {OnDestroy} from '@angular/core';
-import {AccountManagementService} from '../../services/account-management.service';
-import {Group, GroupsPageRequest, GroupsResponse} from '../../models/acc-management';
-import {CommonDataSource} from '../../models/common';
+import {AccountManagementService} from '../../../services/account-management.service';
+import {Group, GroupsPageRequest, GroupsResponse} from '../../../models/acc-management';
+import {CommonDataSource} from '../../../models/common';
 
 export class GroupsDataSource<T> extends CommonDataSource<Group> implements OnDestroy {
   private readonly subscriptions$ = new Subject<void>();

@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {KeycloakService} from 'keycloak-angular';
-import {routes} from '../../app-routing.module';
+import {routes} from '../../../app-routing.module';
 import {Routes} from '@angular/router';
-import {Subscription} from '../../models/subscription';
-import {subscriptionIds} from '../../../environments/environment';
-import {AccountManagementService} from '../../services/account-management.service';
+import {Subscription} from '../../../models/subscription';
+import {subscriptionIds} from '../../../../environments/environment';
+import {AccountManagementService} from '../../../services/account-management.service';
 
 @Component({
   selector: 'app-subscription-bar',

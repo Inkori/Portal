@@ -1,10 +1,10 @@
-import {Device} from '../../models/device';
+import {Device} from '../../../models/device';
 import {Observable, Subject} from 'rxjs';
-import {DeviceProfileService} from '../../services/device-profile.service';
-import {CommonDataSource, Page, PageInner, ParamRequest} from '../../models/common';
+import {DeviceProfileService} from '../../../services/device-profile.service';
+import {CommonDataSource, Page, PageInner, ParamRequest} from '../../../models/common';
 import {finalize, map, pluck, takeUntil} from 'rxjs/operators';
 import {OnDestroy} from '@angular/core';
-import {DevicesResponse} from '../../models/acc-management';
+import {DevicesResponse} from '../../../models/acc-management';
 
 export class DeviceDataSource<T> extends CommonDataSource<Device> implements OnDestroy {
   private readonly subscriptions$ = new Subject<void>();
