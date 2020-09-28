@@ -4,12 +4,12 @@ import {DeviceProfileService} from '../../../services/device-profile.service';
 import {CommonDataSource, Page, PageInner, ParamRequest} from '../../../models/common';
 import {finalize, map, pluck, takeUntil} from 'rxjs/operators';
 import {OnDestroy} from '@angular/core';
-import {DevicesResponse} from '../../../models/acc-management';
+import {CommonResponse} from '../../../models/acc-management';
 
 export class DeviceDataSource<T> extends CommonDataSource<Device> implements OnDestroy {
   private readonly subscriptions$ = new Subject<void>();
   private loadingSubject = new Subject<boolean>();
-  private devicesSubject = new Subject<DevicesResponse>();
+  private devicesSubject = new Subject<CommonResponse>();
 
   public page$ = this.devicesSubject.asObservable();
   public loadingSubject$ = this.loadingSubject.asObservable();
@@ -32,7 +32,7 @@ export class DeviceDataSource<T> extends CommonDataSource<Device> implements OnD
 
     this.deviceProfileService.getDevicesFromApi(request)
       .pipe(
-        map(data  => ({content: data.content, page: this.createPage(data)})),
+        map(data => ({content: data.content, page: this.createPage(data)})),
         finalize(() => this.loadingSubject.next(false)),
         takeUntil(this.subscriptions$))
       .subscribe(devices => {
@@ -40,8 +40,8 @@ export class DeviceDataSource<T> extends CommonDataSource<Device> implements OnD
       });
   }
 
-  private createPage(data: Page<any>): PageInner{
-       return {number: data.number, size: data.size, totalElements: data.totalElements, totalPages: data.totalPages }
+  private createPage(data: Page<any>): PageInner {
+    return {number: data.number, size: data.size, totalElements: data.totalElements, totalPages: data.totalPages};
   }
 
   ngOnDestroy(): void {

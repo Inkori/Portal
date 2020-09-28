@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {GdrService} from '../../../services/gdr.service';
 import {DEFAULT_GDR_PARAM_REQUEST} from '../../../common/constants';
+import {DataType} from '../../../models/common';
 
 @Component({
   selector: 'app-device-registry',
@@ -8,6 +9,9 @@ import {DEFAULT_GDR_PARAM_REQUEST} from '../../../common/constants';
   styleUrls: ['./device-registry.component.css']
 })
 export class DeviceRegistryComponent {
+  pageName = 'Device Registry';
+  dataSourceType = DataType.GDR;
+  selectedIds = [];
 
 
   constructor(private gdrService: GdrService){  }
@@ -20,5 +24,13 @@ export class DeviceRegistryComponent {
     const param = Object.assign({}, DEFAULT_GDR_PARAM_REQUEST);
     param.freeText = 'RG777777'
     this.gdrService.search(param).subscribe(data => console.log(data));
+  }
+
+  getIdList(idList: string[]) {
+    this.selectedIds = idList;
+  }
+
+  generateCode() {
+    // todo
   }
 }

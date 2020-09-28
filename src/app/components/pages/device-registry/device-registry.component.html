@@ -1,2 +1,8 @@
-<button class="btn" (click)="getList()">GetList</button>
-<button class="btn" (click)="search()">Search</button>
+<app-realm-selection [pageName]="pageName"></app-realm-selection>
+<div>
+  <button mat-button class="btn" [hidden]="selectedIds.length" (click)="generateCode()"><span>Generate activation code</span></button>
+</div>
+
+<div class="mat-elevation-z8">
+  <app-table [dataSourceType]="dataSourceType" (idListEmitter)="getIdList($event)"></app-table>
+</div>

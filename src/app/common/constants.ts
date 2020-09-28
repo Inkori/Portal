@@ -42,6 +42,8 @@ export const GROUP_LIST_EMPTY_MESSAGE = 'This organisation doesn\'t have groups'
 export const GROUP_SEARCH_RESPONSE_EMPTY_MESSAGE = 'Group with current search params doesn\'t exist';
 export const DEVICE_LIST_EMPTY_MESSAGE = 'This organisation doesn\'t have devices';
 export const DEVICE_SEARCH_RESPONSE_EMPTY_MESSAGE = 'Device with current search params doesn\'t exist';
+export const GDR_SEARCH_EMPTY_MESSAGE = 'Device info with current search params doesn\'t exist';
+
 
 // requests
 export const DEFAULT_DEVICE_PARAM_REQUEST: ParamRequest = Object.freeze({
@@ -61,3 +63,4 @@ export const TYPE_GROUP = 'GROUP';
 // table columns
 export const DEVICE_TABLE_COLUMNS = ['selectId', 'deviceState.status', 'deviceName', 'deviceSerialnumber', 'groups'];
 export const GROUP_TABLE_COLUMNS = ['groupId', 'name'];
+export const GDR_TABLE_COLUMNS = ['device_id', 'name', 'mt', 'sn', 'mfr', 'enclosure', 'family'];

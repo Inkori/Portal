@@ -86,7 +86,7 @@ export class GroupsResponse {
   page: PageInner;
   _embedded: any;
 }
-export class DevicesResponse {
+export class CommonResponse {
   page: PageInner;
   content: any;
 }

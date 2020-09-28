@@ -59,6 +59,13 @@ export interface GroupDeleteParam {
   groupList: string[]
 }
 
+export interface GdrRequestParam {
+  page: number;
+  size: number;
+  sort: string;
+  key: string;
+}
+
 export interface FormSupplier {
   form: FormGroup;
   props: Array<any>;
@@ -67,10 +74,12 @@ export interface FormSupplier {
 export enum DataType {
   DEVICE,
   GROUP,
+  GDR,
 }
 
-export abstract class CommonDataSource<T> extends DataSource<T>{
+export abstract class CommonDataSource<T> extends DataSource<T> {
   page$: Observable<any>;
   loadingSubject$: Observable<boolean>;
+
   abstract load(request: any): void;
 }

@@ -14,6 +14,10 @@ export class GdrDevice {
   mt: string;
   mtm: string;
   sn: string;
+  name: string;
+  mfr: string;
+  enclosure: string;
+  family: string;
 }
 
 export class PublicKey {

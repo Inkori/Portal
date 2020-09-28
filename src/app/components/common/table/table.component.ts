@@ -6,10 +6,13 @@ import {GroupsDataSource} from '../data-source/groups-data-source';
 import {AccountManagementService} from '../../../services/account-management.service';
 import {
   DEFAULT_DEVICE_PARAM_REQUEST,
+  DEFAULT_GDR_PARAM_REQUEST,
   DEFAULT_GROUP_PARAM_REQUEST,
   DEVICE_LIST_EMPTY_MESSAGE,
   DEVICE_SEARCH_RESPONSE_EMPTY_MESSAGE,
   DEVICE_TABLE_COLUMNS,
+  GDR_SEARCH_EMPTY_MESSAGE,
+  GDR_TABLE_COLUMNS,
   GROUP_ASSIGN_ERROR_MESSAGE,
   GROUP_ASSIGN_MESSAGE,
   GROUP_LIST_EMPTY_MESSAGE,
@@ -22,6 +25,8 @@ import {ListModalComponent} from '../../modals/list-modal/list-modal.component';
 import {AlertService} from '../../../services/alert.service';
 import {DeviceDataSource} from '../data-source/device-data-source';
 import {DeviceProfileService} from '../../../services/device-profile.service';
+import {GdrDataSource} from '../data-source/gdr-data-source';
+import {GdrService} from '../../../services/gdr.service';
 
 @Component({
   selector: 'app-table',
@@ -50,6 +55,7 @@ export class TableComponent implements OnInit, OnDestroy {
 
   constructor(private accManagement: AccountManagementService,
               private deviceProfileService: DeviceProfileService,
+              private gdrService: GdrService,
               private alertService: AlertService,
               private dialog: MatDialog) {
   }
@@ -89,6 +95,13 @@ export class TableComponent implements OnInit, OnDestroy {
       this.emptyListMessage = GROUP_LIST_EMPTY_MESSAGE;
       this.emptySearchResponseMessage = GROUP_SEARCH_RESPONSE_EMPTY_MESSAGE;
       this.dataSource = new GroupsDataSource(this.accManagement);
+    } else if (DataType.GDR === this.dataSourceType) {
+      this.displayedColumns = GDR_TABLE_COLUMNS;
+      this.paramRequest = Object.assign({}, DEFAULT_GDR_PARAM_REQUEST);
+      this.defaultParamRequest = Object.assign({}, DEFAULT_GDR_PARAM_REQUEST);
+      this.emptyListMessage = '';
+      this.emptySearchResponseMessage = GDR_SEARCH_EMPTY_MESSAGE;
+      this.dataSource = new GdrDataSource(this.gdrService);
     }
   }
 
