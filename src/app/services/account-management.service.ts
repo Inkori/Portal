@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Environment} from '../../environments/environment';
-import {ORG_REALMS, REALM, SUBSCRIPTION_ID} from '../common/constants';
+import {ORG_REALMS, REALM, SUBSCRIPTION_ID} from '../constants/constants';
 import {Subscription} from '../models/subscription';
 import {GroupsPageRequest, GroupsResponse, Organization} from '../models/acc-management';
 import {pluck} from 'rxjs/operators';

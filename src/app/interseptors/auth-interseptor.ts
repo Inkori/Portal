@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {AccountManagementService} from '../services/account-management.service';
-import {X_SUBSCRIPTION, X_TENANT} from '../common/constants';
+import {X_SUBSCRIPTION, X_TENANT} from '../constants/constants';
 import {tap} from 'rxjs/operators';
 import {AuthService} from '../services/auth.service';
 

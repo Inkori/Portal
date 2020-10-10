@@ -14,8 +14,9 @@ import {
   DEVICE_ADD_ERROR_MESSAGE,
   DEVICE_ADD_MESSAGE,
   DEVICE_DELETE_ERROR_MESSAGE,
-  DEVICE_DELETE_MESSAGE
-} from '../../../common/constants';
+  DEVICE_DELETE_MESSAGE,
+  MT_VR_S3
+} from '../../../constants/constants';
 
 @Component({
   selector: 'app-devices',
@@ -67,6 +68,7 @@ export class DevicesComponent implements OnInit, OnDestroy {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
+    dialogConfig.data = {type: DataType.DEVICE};
     const dialogRef = this.dialog.open(AddModalComponent, dialogConfig);
     dialogRef.afterClosed().pipe(takeUntil(this.subscriptions$)).subscribe(
       data => this.addDeviceToPortal(data)
@@ -80,7 +82,7 @@ export class DevicesComponent implements OnInit, OnDestroy {
     if (data.regType === AIM_AUTO) {
       this.deviceProfileService.addDeviceClaim({
         device_name: data.form.deviceName,
-        mt: 'VR-S3',
+        mt: MT_VR_S3,
         sn: data.form.serialNumber,
         token: data.form.activationCode,
       }).pipe(takeUntil(this.subscriptions$)).subscribe({

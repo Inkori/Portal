@@ -6,7 +6,7 @@
       <span>Reload</span>
     </button>
 
-    <button mat-button class="btn left" [matMenuTriggerFor]="realms">
+    <button *ngIf="!hide" mat-button class="btn left" [matMenuTriggerFor]="realms">
       <span>{{ currentRealm ? currentRealm : 'Select an organization' }}</span>
     </button>
 

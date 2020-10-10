@@ -9,7 +9,7 @@ import {
   GROUP_DELETE_ERROR_MESSAGE,
   GROUP_DELETE_MESSAGE,
   TYPE_DEVICE
-} from '../../../common/constants';
+} from '../../../constants/constants';
 import {takeUntil} from 'rxjs/operators';
 import {AccountManagementService} from '../../../services/account-management.service';
 import {AlertService} from '../../../services/alert.service';
@@ -24,6 +24,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
   private readonly subscriptions$ = new Subject<void>();
   pageName = 'Groups page';
   dataSourceType = DataType.GROUP;
+  isRealmSelected: boolean;
   selectedIds = [];
 
   @ViewChild(TableComponent) tableComponent: TableComponent;
@@ -32,6 +33,10 @@ export class GroupsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.isRealmSelected = this.accManagement.isRealmSelected();
+    this.accManagement.currentRealm$.pipe(takeUntil(this.subscriptions$)).subscribe(data => {
+      this.isRealmSelected = !!data;
+    });
   }
 
   ngOnDestroy(): void {

@@ -1,10 +1,10 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {ADD_DEVICE_FORM, ADD_GROUP_FORM} from '../../../common/form-constants';
+import {ADD_DEVICE_FORM, ADD_GROUP_FORM} from '../../../constants/form-constants';
 import {FormService} from '../../../services/form.service';
 import {DataType} from '../../../models/common';
-import {REGISTRATION_TITLES, TYPE_GROUP} from '../../../common/constants';
+import {REGISTRATION_TITLES, TYPE_GROUP} from '../../../constants/constants';
 
 @Component({
   selector: 'app-add-device-modal',
@@ -24,6 +24,7 @@ export class AddModalComponent implements OnInit{
   }
 
   ngOnInit(): void {
+    console.log(this.data);
     this.modalType = this.data.type;
     if (this.modalType === DataType.GROUP){
       this.registrationTypeChange(TYPE_GROUP);

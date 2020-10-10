@@ -1,16 +1,18 @@
 import {Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, ViewChildren} from '@angular/core';
-import {CommonDataSource, DataType} from '../../../models/common';
+import {CommonDataSource, DataType, TableParams} from '../../../models/common';
 import {takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
 import {GroupsDataSource} from '../data-source/groups-data-source';
 import {AccountManagementService} from '../../../services/account-management.service';
 import {
+  ALERT_DANGER,
   DEFAULT_DEVICE_PARAM_REQUEST,
   DEFAULT_GDR_PARAM_REQUEST,
   DEFAULT_GROUP_PARAM_REQUEST,
   DEVICE_LIST_EMPTY_MESSAGE,
   DEVICE_SEARCH_RESPONSE_EMPTY_MESSAGE,
   DEVICE_TABLE_COLUMNS,
+  EMPTY_ID_ARR_ERROR_MESSAGE,
   GDR_SEARCH_EMPTY_MESSAGE,
   GDR_TABLE_COLUMNS,
   GROUP_ASSIGN_ERROR_MESSAGE,
@@ -18,7 +20,7 @@ import {
   GROUP_LIST_EMPTY_MESSAGE,
   GROUP_SEARCH_RESPONSE_EMPTY_MESSAGE,
   GROUP_TABLE_COLUMNS
-} from '../../../common/constants';
+} from '../../../constants/constants';
 import {PageEvent} from '@angular/material/paginator';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {ListModalComponent} from '../../modals/list-modal/list-modal.component';
@@ -36,7 +38,8 @@ import {GdrService} from '../../../services/gdr.service';
 export class TableComponent implements OnInit, OnDestroy {
   private readonly subscriptions$ = new Subject<void>();
   dataSource: CommonDataSource<any>;
-  displayedColumns = [];
+  displayedColumns: TableParams[];
+  displayedHeaders: string[];
   paramRequest: any;
   defaultParamRequest: any;
   isRealmSelected: boolean;
@@ -83,13 +86,16 @@ export class TableComponent implements OnInit, OnDestroy {
   private initDependsOnDataSourceType(): void {
     if (DataType.DEVICE === this.dataSourceType) {
       this.displayedColumns = DEVICE_TABLE_COLUMNS;
+      this.displayedHeaders = this.displayedColumns.map(entity => entity.name);
       this.paramRequest = Object.assign({}, DEFAULT_DEVICE_PARAM_REQUEST);
       this.defaultParamRequest = Object.assign({}, DEFAULT_DEVICE_PARAM_REQUEST);
       this.emptyListMessage = DEVICE_LIST_EMPTY_MESSAGE;
       this.emptySearchResponseMessage = DEVICE_SEARCH_RESPONSE_EMPTY_MESSAGE;
       this.dataSource = new DeviceDataSource(this.deviceProfileService);
-    } else if (DataType.GROUP === this.dataSourceType) {
+    }
+    else if (DataType.GROUP === this.dataSourceType) {
       this.displayedColumns = GROUP_TABLE_COLUMNS;
+      this.displayedHeaders = this.displayedColumns.map(entity => entity.name);
       this.paramRequest = Object.assign({}, DEFAULT_GROUP_PARAM_REQUEST);
       this.defaultParamRequest = Object.assign({}, DEFAULT_GROUP_PARAM_REQUEST);
       this.emptyListMessage = GROUP_LIST_EMPTY_MESSAGE;
@@ -97,6 +103,7 @@ export class TableComponent implements OnInit, OnDestroy {
       this.dataSource = new GroupsDataSource(this.accManagement);
     } else if (DataType.GDR === this.dataSourceType) {
       this.displayedColumns = GDR_TABLE_COLUMNS;
+      this.displayedHeaders = this.displayedColumns.map(entity => entity.name);
       this.paramRequest = Object.assign({}, DEFAULT_GDR_PARAM_REQUEST);
       this.defaultParamRequest = Object.assign({}, DEFAULT_GDR_PARAM_REQUEST);
       this.emptyListMessage = '';
@@ -131,15 +138,20 @@ export class TableComponent implements OnInit, OnDestroy {
   }
 
   activateCheckBoxes() {
-    this.selectedIds.forEach(id =>
-      this.checkBoxes.forEach(box => {
-        if (box.nativeElement.id === id) {
-          console.log(box.nativeElement.id);
-          console.log(box.nativeElement.checked);
-          box.nativeElement.checked = true;
-          box.nativeElement.dispatchEvent(new MouseEvent('change'));
+    // this.selectedIds.forEach(id =>
+    // console.log(this.checkBoxes);
+      this.selectedIds.forEach(id => {
+        const box = this.checkBoxes.find(value => value.nativeElement.id === id)
+        if (box){
+          console.log(box);
+          // console.log(box.nativeElement.id);
+          // console.log(box.nativeElement.checked);
+          // box.nativeElement.checked = true;
+          // box.nativeElement.dispatchEvent(new MouseEvent('change'));
         }
-      }));
+      }
+      // )
+  );
   }
 
   getServerData($event: PageEvent) {
@@ -162,7 +174,9 @@ export class TableComponent implements OnInit, OnDestroy {
   load(paramRequest?: any) {
     // this.selectAllCheckBoxes(false, true);
     this.dataSource.load(paramRequest ? paramRequest : this.paramRequest);
-    this.dataSource.page$.subscribe(() => this.activateCheckBoxes());
+    this.dataSource.page$.subscribe(() => {
+      this.activateCheckBoxes();
+    });
   }
 
   private selectAllCheckBoxes(value: boolean, clear?: boolean) {
@@ -196,7 +210,12 @@ export class TableComponent implements OnInit, OnDestroy {
   }
 
   private assignGroupToDeviceBulk(data: any) {
-    this.accManagement.assignGroupsBulk(data.map(id => ({deviceId: id})), this.selectedIds)
+    const deviceIds = (this.dataSourceType === DataType.GROUP ? data : this.selectedIds).filter(val => val);
+    const groupIds = (this.dataSourceType === DataType.DEVICE ? data : this.selectedIds).filter(val => val);
+    if (deviceIds.length < 1 || groupIds.length < 1) {
+      this.alertService.showAlertMessage(EMPTY_ID_ARR_ERROR_MESSAGE, null, ALERT_DANGER); return;
+    }
+    this.accManagement.assignGroupsBulk(deviceIds.map(id => ({deviceId: id})), groupIds)
       .pipe(takeUntil(this.subscriptions$))
       .subscribe({
         next: () => {
@@ -215,7 +234,9 @@ export class TableComponent implements OnInit, OnDestroy {
 
   getInnerData(element: any): string {
     // todo type check(instance of doesn't work!)
-      return element.groupName;
+    return element.groupName;
 
   }
+
+
 }

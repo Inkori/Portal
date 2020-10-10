@@ -26,6 +26,8 @@ export class SubscriptionBarComponent implements OnInit {
 
   logout() {
     this.keycloak.logout();
+// just for test
+    this.accManagement.setSubscription(null);
   }
 
   setSubscription(subscription: Subscription) {

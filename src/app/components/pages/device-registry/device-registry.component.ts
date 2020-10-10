@@ -1,20 +1,37 @@
-import {Component} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {GdrService} from '../../../services/gdr.service';
-import {DEFAULT_GDR_PARAM_REQUEST} from '../../../common/constants';
+import {DEFAULT_GDR_PARAM_REQUEST} from '../../../constants/constants';
 import {DataType} from '../../../models/common';
+import {takeUntil} from 'rxjs/operators';
+import {AccountManagementService} from '../../../services/account-management.service';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-device-registry',
   templateUrl: './device-registry.component.html',
   styleUrls: ['./device-registry.component.css']
 })
-export class DeviceRegistryComponent {
+export class DeviceRegistryComponent implements OnInit, OnDestroy {
+  private readonly subscriptions$ = new Subject<void>();
   pageName = 'Device Registry';
   dataSourceType = DataType.GDR;
+  isRealmSelected: boolean;
   selectedIds = [];
 
 
-  constructor(private gdrService: GdrService){  }
+  constructor(private gdrService: GdrService, private accManagement: AccountManagementService){  }
+
+  ngOnInit(): void {
+    this.isRealmSelected = this.accManagement.isRealmSelected();
+    this.accManagement.currentRealm$.pipe(takeUntil(this.subscriptions$)).subscribe(data => {
+      this.isRealmSelected = !!data;
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions$.next();
+    this.subscriptions$.complete();
+  }
 
   getList() {
     this.gdrService.getDevicesGdr(DEFAULT_GDR_PARAM_REQUEST).subscribe(data => console.log(data));

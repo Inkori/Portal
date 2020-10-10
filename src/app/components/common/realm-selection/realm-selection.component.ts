@@ -23,6 +23,7 @@ export class RealmSelectionComponent implements OnInit, OnDestroy {
   }
 
   @Input() pageName: string;
+  @Input() hide: boolean;
 
   ngOnInit(): void {
 

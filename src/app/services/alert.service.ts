@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition} from '@angular/material/snack-bar';
 import {HttpErrorResponse} from '@angular/common/http';
+import {ALERT_DANGER, ALERT_SUCCESS} from '../constants/constants';
 
 @Injectable({
   providedIn: 'root'
@@ -12,12 +13,12 @@ export class AlertService {
   constructor(private bar: MatSnackBar) {
   }
 
-  showAlertMessage(message: string, error?: HttpErrorResponse) {
+  showAlertMessage(message: string, error?: HttpErrorResponse, style?: string) {
     this.bar.open(message + this.parseError(error), 'close', {
       duration: 5000,
       horizontalPosition: this.horizontalPosition,
       verticalPosition: this.verticalPosition,
-      panelClass: error ? 'alert-danger' : 'alert-success',
+      panelClass: error || style === ALERT_DANGER ? ALERT_DANGER : ALERT_SUCCESS,
     });
   }
 

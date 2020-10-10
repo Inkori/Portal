@@ -71,6 +71,11 @@ export interface FormSupplier {
   props: Array<any>;
 }
 
+export interface TableParams {
+  param: any;
+  name: string;
+}
+
 export enum DataType {
   DEVICE,
   GROUP,
@@ -83,3 +88,5 @@ export abstract class CommonDataSource<T> extends DataSource<T> {
 
   abstract load(request: any): void;
 }
+
+

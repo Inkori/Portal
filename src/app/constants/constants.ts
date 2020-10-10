@@ -33,6 +33,7 @@ export const DEVICE_ADD_MESSAGE = 'Device has been added';
 export const GROUP_CREATE_ERROR_MESSAGE = 'Can\'t add group. Reason: ';
 export const GROUP_CREATE_MESSAGE = 'Group has been created';
 export const GROUP_ASSIGN_ERROR_MESSAGE = 'Can\'t assign group. Reason: ';
+export const EMPTY_ID_ARR_ERROR_MESSAGE = 'Can\'t assign group. Groups or devices don\'t have correct ID';
 export const GROUP_ASSIGN_MESSAGE = 'Group has been assigned';
 export const GROUP_DELETE_ERROR_MESSAGE = 'Can\'t delete group. Reason: ';
 export const GROUP_DELETE_MESSAGE = 'Group has been deleted';
@@ -61,6 +62,23 @@ export const TYPE_DEVICE = 'DEVICE';
 export const TYPE_GROUP = 'GROUP';
 
 // table columns
-export const DEVICE_TABLE_COLUMNS = ['selectId', 'deviceState.status', 'deviceName', 'deviceSerialnumber', 'groups'];
-export const GROUP_TABLE_COLUMNS = ['groupId', 'name'];
-export const GDR_TABLE_COLUMNS = ['device_id', 'name', 'mt', 'sn', 'mfr', 'enclosure', 'family'];
+export const GROUP_TABLE_COLUMNS = [{param: 'groupId', name: 'groupId'}, {param: 'name', name: 'name'}]
+export const DEVICE_TABLE_COLUMNS = [
+  {param: 'deviceId', name: 'deviceId'},
+  {param: ['deviceState', 'status'], name: 'Status'},
+  {param: 'deviceName', name: 'Name'},
+  {param: 'deviceSerialnumber', name: 'Serial number'},
+  {param: 'groups', name: 'Groups'}];
+export const GDR_TABLE_COLUMNS = [
+  {param: 'device_id', name: 'device_id'},
+  {param: 'name', name: 'Name'},
+  {param: 'mt', name: 'Model type'},
+  {param: 'sn', name: 'Serial number'},
+  {param: 'mfr', name: 'Manufacturer'},
+  {param: 'enclosure', name: 'Enclosure type'},
+  {param: 'family', name: 'Device Family'}];
+
+// common
+export const MT_VR_S3 = 'VR-S3';
+export const ALERT_DANGER = 'alert-danger';
+export const ALERT_SUCCESS = 'alert-success';
