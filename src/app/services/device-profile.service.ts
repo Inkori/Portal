@@ -3,7 +3,8 @@ import {Environment} from '../../environments/environment';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Device} from '../models/device';
 import {Observable} from 'rxjs';
-import {AddDeviceClaim, AddDeviceManual, Page, ParamRequest} from '../models/common';
+import {AddDeviceClaim, AddDeviceManual, Page} from '../models/common';
+import {PageRequest} from '../models/acc-management';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ export class DeviceProfileService {
     this.url = Environment.portalUrl + '/device-profile-service/lcp/apis/v1/devices';
   }
 
-  getDevicesFromApi(request: ParamRequest): Observable<Page<Device>> {
+  getDevicesFromApi(request: PageRequest): Observable<Page<Device>> {
     const params = this.getHttpParams(request);
     return this.http.get<Page<Device>>(this.url, {params});
   }
@@ -32,13 +33,12 @@ export class DeviceProfileService {
     return this.http.post(this.url + '/activation/claim', params);
   }
 
-  private getHttpParams(request: ParamRequest): HttpParams {
+  private getHttpParams(request: PageRequest): HttpParams {
     const {pageNumber, pageSize, sortByProperty, sortByDirection, freeText} = request;
     return new HttpParams()
       .set('page', `${pageNumber}`)
       .set('size', `${pageSize}`)
-      .set('sort', `${sortByProperty},${sortByDirection}`)
-      // .set('sort', `${sortByProperty},${sortByDirection ? 'ASC' : 'DESC'}`)
+      .set('sort', `${sortByProperty},${sortByDirection ? 'ASC' : 'DESC'}`)
       .set('freeText', `${freeText}`);
   }
 }

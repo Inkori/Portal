@@ -1,10 +1,10 @@
 import {Observable, Subject} from 'rxjs';
 import {finalize, map, pluck, takeUntil} from 'rxjs/operators';
 import {OnDestroy} from '@angular/core';
-import {CommonDataSource, Page, PageInner, ParamRequest} from '../../../models/common';
+import {CommonDataSource, Page, PageInner} from '../../../models/common';
 import {GdrDevice} from '../../../models/gdr';
 import {GdrService} from '../../../services/gdr.service';
-import {CommonResponse} from '../../../models/acc-management';
+import {CommonResponse, PageRequest} from '../../../models/acc-management';
 
 export class GdrDataSource<T> extends CommonDataSource<GdrDevice> implements OnDestroy {
   private readonly subscriptions$ = new Subject<void>();
@@ -32,7 +32,7 @@ export class GdrDataSource<T> extends CommonDataSource<GdrDevice> implements OnD
     this.loadingSubject.complete();
   }
 
-  load(request: ParamRequest) {
+  load(request: PageRequest) {
     this.loadingSubject.next(true);
     if (!request.freeText) {
       this.gdrService.getDevicesGdr(request)

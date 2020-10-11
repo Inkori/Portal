@@ -1,6 +1,5 @@
 // local storage
-import {ParamRequest} from '../models/common';
-import {GroupsPageRequest, GroupType} from '../models/acc-management';
+import {GroupsPageRequest, GroupType, PageRequest} from '../models/acc-management';
 
 export const REALM = 'realm';
 export const SUBSCRIPTION_ID = 'subscriptionId';
@@ -47,14 +46,14 @@ export const GDR_SEARCH_EMPTY_MESSAGE = 'Device info with current search params 
 
 
 // requests
-export const DEFAULT_DEVICE_PARAM_REQUEST: ParamRequest = Object.freeze({
-  pageNumber: 0, pageSize: 7, sortByProperty: 'deviceName', sortByDirection: ASC, freeText: ''
+export const DEFAULT_DEVICE_PAGE_REQUEST: PageRequest = Object.freeze({
+  pageNumber: 0, pageSize: 7, sortByProperty: 'deviceName', sortByDirection: true, freeText: ''
 });
 export const DEFAULT_GROUP_PARAM_REQUEST: GroupsPageRequest = {
   'type': GroupType.DEVICE, activityState : 'ACTIVE', pageNumber: 0, pageSize: 5, sortByProperty: 'displayName', sortByDirection: true, freeText: '',
 }
-export const DEFAULT_GDR_PARAM_REQUEST: ParamRequest = Object.freeze({
-  pageNumber: 0, pageSize: 7, sortByProperty: 'name', sortByDirection: ASC, freeText: ''
+export const DEFAULT_GDR_PAGE_REQUEST: PageRequest = Object.freeze({
+  pageNumber: 0, pageSize: 7, sortByProperty: 'name', sortByDirection: true, freeText: ''
 });
 
 // entity type
@@ -68,7 +67,7 @@ export const DEVICE_TABLE_COLUMNS = [
   {param: ['deviceState', 'status'], name: 'Status'},
   {param: 'deviceName', name: 'Name'},
   {param: 'deviceSerialnumber', name: 'Serial number'},
-  {param: 'groups', name: 'Groups'}];
+  {param: 'groups', name: 'Groups', sortDisable: true}];
 export const GDR_TABLE_COLUMNS = [
   {param: 'device_id', name: 'device_id'},
   {param: 'name', name: 'Name'},

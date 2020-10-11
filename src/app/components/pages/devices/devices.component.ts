@@ -54,8 +54,8 @@ export class DevicesComponent implements OnInit, OnDestroy {
   delete() {
     this.deviceProfileService.deleteDevices(this.selectedIds).pipe(takeUntil(this.subscriptions$)).subscribe({
       next: () => {
-        this.tableComponent.paramRequest.pageNumber = 0;
-        this.tableComponent.paramRequest.freeText = '';
+        this.tableComponent.pageRequest.pageNumber = 0;
+        this.tableComponent.pageRequest.freeText = '';
         this.tableComponent.load();
         this.alertService.showAlertMessage(DEVICE_DELETE_MESSAGE);
       },

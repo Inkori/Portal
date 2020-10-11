@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {GdrService} from '../../../services/gdr.service';
-import {DEFAULT_GDR_PARAM_REQUEST} from '../../../constants/constants';
+import {DEFAULT_GDR_PAGE_REQUEST} from '../../../constants/constants';
 import {DataType} from '../../../models/common';
 import {takeUntil} from 'rxjs/operators';
 import {AccountManagementService} from '../../../services/account-management.service';
@@ -34,11 +34,11 @@ export class DeviceRegistryComponent implements OnInit, OnDestroy {
   }
 
   getList() {
-    this.gdrService.getDevicesGdr(DEFAULT_GDR_PARAM_REQUEST).subscribe(data => console.log(data));
+    this.gdrService.getDevicesGdr(DEFAULT_GDR_PAGE_REQUEST).subscribe(data => console.log(data));
   }
 
   search() {
-    const param = Object.assign({}, DEFAULT_GDR_PARAM_REQUEST);
+    const param = Object.assign({}, DEFAULT_GDR_PAGE_REQUEST);
     param.freeText = 'RG777777'
     this.gdrService.search(param).subscribe(data => console.log(data));
   }

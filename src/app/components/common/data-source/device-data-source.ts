@@ -1,10 +1,10 @@
 import {Device} from '../../../models/device';
 import {Observable, Subject} from 'rxjs';
 import {DeviceProfileService} from '../../../services/device-profile.service';
-import {CommonDataSource, Page, PageInner, ParamRequest} from '../../../models/common';
+import {CommonDataSource, Page, PageInner} from '../../../models/common';
 import {finalize, map, pluck, takeUntil} from 'rxjs/operators';
 import {OnDestroy} from '@angular/core';
-import {CommonResponse} from '../../../models/acc-management';
+import {CommonResponse, PageRequest} from '../../../models/acc-management';
 
 export class DeviceDataSource<T> extends CommonDataSource<Device> implements OnDestroy {
   private readonly subscriptions$ = new Subject<void>();
@@ -27,7 +27,7 @@ export class DeviceDataSource<T> extends CommonDataSource<Device> implements OnD
     this.loadingSubject.complete();
   }
 
-  load(request: ParamRequest) {
+  load(request: PageRequest) {
     this.loadingSubject.next(true);
 
     this.deviceProfileService.getDevicesFromApi(request)

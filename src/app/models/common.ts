@@ -19,14 +19,6 @@ export interface PageInner {
 }
 
 
-export interface ParamRequest {
-  pageNumber?: number;
-  pageSize?: number;
-  sortByProperty?: string;
-  sortByDirection?: string;
-  freeText?: string;
-}
-
 export interface AddDeviceManual {
   deviceName?: string;
   deviceSerialnumber: string;
@@ -74,6 +66,7 @@ export interface FormSupplier {
 export interface TableParams {
   param: any;
   name: string;
+  sortDisable?: boolean;
 }
 
 export enum DataType {

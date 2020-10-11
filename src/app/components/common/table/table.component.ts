@@ -6,8 +6,8 @@ import {GroupsDataSource} from '../data-source/groups-data-source';
 import {AccountManagementService} from '../../../services/account-management.service';
 import {
   ALERT_DANGER,
-  DEFAULT_DEVICE_PARAM_REQUEST,
-  DEFAULT_GDR_PARAM_REQUEST,
+  DEFAULT_DEVICE_PAGE_REQUEST,
+  DEFAULT_GDR_PAGE_REQUEST,
   DEFAULT_GROUP_PARAM_REQUEST,
   DEVICE_LIST_EMPTY_MESSAGE,
   DEVICE_SEARCH_RESPONSE_EMPTY_MESSAGE,
@@ -29,6 +29,7 @@ import {DeviceDataSource} from '../data-source/device-data-source';
 import {DeviceProfileService} from '../../../services/device-profile.service';
 import {GdrDataSource} from '../data-source/gdr-data-source';
 import {GdrService} from '../../../services/gdr.service';
+import {PageRequest} from '../../../models/acc-management';
 
 @Component({
   selector: 'app-table',
@@ -40,14 +41,15 @@ export class TableComponent implements OnInit, OnDestroy {
   dataSource: CommonDataSource<any>;
   displayedColumns: TableParams[];
   displayedHeaders: string[];
-  paramRequest: any;
-  defaultParamRequest: any;
+  pageRequest: PageRequest;
+  defaultPageRequest: PageRequest;
   isRealmSelected: boolean;
   loading: boolean;
   emptyListMessage: string;
   emptySearchResponseMessage: string;
   selectedIds = [];
   selectAllIds = false;
+  sortDirection: boolean;
 
   @ViewChild('searchInput') searchInput: ElementRef;
   @ViewChild('checkAll') checkAllBoxes: ElementRef;
@@ -72,13 +74,13 @@ export class TableComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.isRealmSelected = this.accManagement.isRealmSelected();
     this.initDependsOnDataSourceType();
-    this.dataSource.load(this.defaultParamRequest);
+    this.dataSource.load(this.defaultPageRequest);
     this.dataSource.loadingSubject$.pipe(takeUntil(this.subscriptions$)).subscribe(value => this.loading = value);
     this.accManagement.reloadPage$.pipe(takeUntil(this.subscriptions$)).subscribe(() => this.load());
     this.accManagement.currentRealm$.pipe(takeUntil(this.subscriptions$)).subscribe(data => {
       this.isRealmSelected = !!data;
       if (!!data) {
-        this.load(this.defaultParamRequest);
+        this.load(this.defaultPageRequest);
       }
     });
   }
@@ -87,8 +89,8 @@ export class TableComponent implements OnInit, OnDestroy {
     if (DataType.DEVICE === this.dataSourceType) {
       this.displayedColumns = DEVICE_TABLE_COLUMNS;
       this.displayedHeaders = this.displayedColumns.map(entity => entity.name);
-      this.paramRequest = Object.assign({}, DEFAULT_DEVICE_PARAM_REQUEST);
-      this.defaultParamRequest = Object.assign({}, DEFAULT_DEVICE_PARAM_REQUEST);
+      this.pageRequest = Object.assign({}, DEFAULT_DEVICE_PAGE_REQUEST);
+      this.defaultPageRequest = Object.assign({}, DEFAULT_DEVICE_PAGE_REQUEST);
       this.emptyListMessage = DEVICE_LIST_EMPTY_MESSAGE;
       this.emptySearchResponseMessage = DEVICE_SEARCH_RESPONSE_EMPTY_MESSAGE;
       this.dataSource = new DeviceDataSource(this.deviceProfileService);
@@ -96,16 +98,16 @@ export class TableComponent implements OnInit, OnDestroy {
     else if (DataType.GROUP === this.dataSourceType) {
       this.displayedColumns = GROUP_TABLE_COLUMNS;
       this.displayedHeaders = this.displayedColumns.map(entity => entity.name);
-      this.paramRequest = Object.assign({}, DEFAULT_GROUP_PARAM_REQUEST);
-      this.defaultParamRequest = Object.assign({}, DEFAULT_GROUP_PARAM_REQUEST);
+      this.pageRequest = Object.assign({}, DEFAULT_GROUP_PARAM_REQUEST);
+      this.defaultPageRequest = Object.assign({}, DEFAULT_GROUP_PARAM_REQUEST);
       this.emptyListMessage = GROUP_LIST_EMPTY_MESSAGE;
       this.emptySearchResponseMessage = GROUP_SEARCH_RESPONSE_EMPTY_MESSAGE;
       this.dataSource = new GroupsDataSource(this.accManagement);
     } else if (DataType.GDR === this.dataSourceType) {
       this.displayedColumns = GDR_TABLE_COLUMNS;
       this.displayedHeaders = this.displayedColumns.map(entity => entity.name);
-      this.paramRequest = Object.assign({}, DEFAULT_GDR_PARAM_REQUEST);
-      this.defaultParamRequest = Object.assign({}, DEFAULT_GDR_PARAM_REQUEST);
+      this.pageRequest = Object.assign({}, DEFAULT_GDR_PAGE_REQUEST);
+      this.defaultPageRequest = Object.assign({}, DEFAULT_GDR_PAGE_REQUEST);
       this.emptyListMessage = '';
       this.emptySearchResponseMessage = GDR_SEARCH_EMPTY_MESSAGE;
       this.dataSource = new GdrDataSource(this.gdrService);
@@ -159,21 +161,29 @@ export class TableComponent implements OnInit, OnDestroy {
     this.load();
   }
 
+  sort(column: string, sortDisable: boolean): void {
+    if (!sortDisable) {
+      this.pageRequest.sortByDirection = (this.pageRequest.sortByProperty === column && (this.sortDirection = !this.sortDirection));
+      this.pageRequest.sortByProperty = column;
+      this.load(this.pageRequest);
+    }
+  }
+
   private setDefaultRequestParams(): void {
     if (this.searchInput) {
       this.searchInput.nativeElement.value = '';
     }
-    this.paramRequest = Object.assign({}, this.defaultParamRequest);
+    this.pageRequest = Object.assign({}, this.defaultPageRequest);
   }
 
   private setPaginationRequest(data): void {
-    this.paramRequest.pageSize = data.pageSize;
-    this.paramRequest.pageNumber = data.pageIndex;
+    this.pageRequest.pageSize = data.pageSize;
+    this.pageRequest.pageNumber = data.pageIndex;
   }
 
-  load(paramRequest?: any) {
+  load(pageRequest?: any) {
     // this.selectAllCheckBoxes(false, true);
-    this.dataSource.load(paramRequest ? paramRequest : this.paramRequest);
+    this.dataSource.load(pageRequest ? pageRequest : this.pageRequest);
     this.dataSource.page$.subscribe(() => {
       this.activateCheckBoxes();
     });
@@ -191,7 +201,7 @@ export class TableComponent implements OnInit, OnDestroy {
   }
 
   searchBy(value: string) {
-    this.paramRequest.freeText = value;
+    this.pageRequest.freeText = value;
     this.load();
   }
 
@@ -219,9 +229,9 @@ export class TableComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.subscriptions$))
       .subscribe({
         next: () => {
-          this.paramRequest.pageNumber = 0;
-          this.paramRequest.freeText = '';
-          this.load(this.defaultParamRequest);
+          this.pageRequest.pageNumber = 0;
+          this.pageRequest.freeText = '';
+          this.load(this.defaultPageRequest);
           this.alertService.showAlertMessage(GROUP_ASSIGN_MESSAGE);
         },
         error: (error) => this.alertService.showAlertMessage(GROUP_ASSIGN_ERROR_MESSAGE, error)
@@ -237,6 +247,4 @@ export class TableComponent implements OnInit, OnDestroy {
     return element.groupName;
 
   }
-
-
 }
