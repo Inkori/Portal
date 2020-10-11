@@ -1,4 +1,4 @@
-import {Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, ViewChildren} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, QueryList, ViewChild, ViewChildren} from '@angular/core';
 import {CommonDataSource, DataType, TableParams} from '../../../models/common';
 import {takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
@@ -53,7 +53,7 @@ export class TableComponent implements OnInit, OnDestroy {
 
   @ViewChild('searchInput') searchInput: ElementRef;
   @ViewChild('checkAll') checkAllBoxes: ElementRef;
-  @ViewChildren('check') checkBoxes: ElementRef[];
+  @ViewChildren('check') checkBoxes: QueryList<ElementRef>;
   @Input() dataSourceType: DataType;
   @Output() idListEmitter = new EventEmitter<string[]>();
 
@@ -65,24 +65,25 @@ export class TableComponent implements OnInit, OnDestroy {
               private dialog: MatDialog) {
   }
 
-  ngOnDestroy(): void {
-    this.subscriptions$.next();
-    this.subscriptions$.complete();
-    this.setDefaultRequestParams();
-  }
-
   ngOnInit(): void {
     this.isRealmSelected = this.accManagement.isRealmSelected();
     this.initDependsOnDataSourceType();
     this.dataSource.load(this.defaultPageRequest);
-    this.dataSource.loadingSubject$.pipe(takeUntil(this.subscriptions$)).subscribe(value => this.loading = value);
+    this.dataSource.loadingSubject$.pipe(takeUntil(this.subscriptions$)).subscribe(value => {
+      this.loading = value;
+      if (!this.loading) { setTimeout(() => this.activateCheckBoxes()); }
+    });
     this.accManagement.reloadPage$.pipe(takeUntil(this.subscriptions$)).subscribe(() => this.load());
     this.accManagement.currentRealm$.pipe(takeUntil(this.subscriptions$)).subscribe(data => {
       this.isRealmSelected = !!data;
-      if (!!data) {
-        this.load(this.defaultPageRequest);
-      }
+      if (!!data) { this.load(this.defaultPageRequest); }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions$.next();
+    this.subscriptions$.complete();
+    this.setDefaultRequestParams();
   }
 
   private initDependsOnDataSourceType(): void {
@@ -94,8 +95,7 @@ export class TableComponent implements OnInit, OnDestroy {
       this.emptyListMessage = DEVICE_LIST_EMPTY_MESSAGE;
       this.emptySearchResponseMessage = DEVICE_SEARCH_RESPONSE_EMPTY_MESSAGE;
       this.dataSource = new DeviceDataSource(this.deviceProfileService);
-    }
-    else if (DataType.GROUP === this.dataSourceType) {
+    } else if (DataType.GROUP === this.dataSourceType) {
       this.displayedColumns = GROUP_TABLE_COLUMNS;
       this.displayedHeaders = this.displayedColumns.map(entity => entity.name);
       this.pageRequest = Object.assign({}, DEFAULT_GROUP_PARAM_REQUEST);
@@ -140,20 +140,15 @@ export class TableComponent implements OnInit, OnDestroy {
   }
 
   activateCheckBoxes() {
-    // this.selectedIds.forEach(id =>
-    // console.log(this.checkBoxes);
-      this.selectedIds.forEach(id => {
-        const box = this.checkBoxes.find(value => value.nativeElement.id === id)
-        if (box){
-          console.log(box);
-          // console.log(box.nativeElement.id);
-          // console.log(box.nativeElement.checked);
-          // box.nativeElement.checked = true;
-          // box.nativeElement.dispatchEvent(new MouseEvent('change'));
-        }
-      }
-      // )
-  );
+    this.selectedIds.forEach(id => {
+      const box = this.checkBoxes.find(value => value.nativeElement.id === id);
+      if (box){ box.nativeElement.checked = true; }
+    });
+    if (!this.checkBoxes.find(el => !el.nativeElement.checked)) {
+      this.checkAllBoxes.nativeElement.checked = true;
+      return;
+    }
+    this.checkAllBoxes.nativeElement.checked = false;
   }
 
   getServerData($event: PageEvent) {
@@ -182,22 +177,17 @@ export class TableComponent implements OnInit, OnDestroy {
   }
 
   load(pageRequest?: any) {
-    // this.selectAllCheckBoxes(false, true);
     this.dataSource.load(pageRequest ? pageRequest : this.pageRequest);
-    this.dataSource.page$.subscribe(() => {
-      this.activateCheckBoxes();
-    });
   }
 
   private selectAllCheckBoxes(value: boolean, clear?: boolean) {
-    // todo
-    // this.selectAllIds = value;
-    // if (this.checkAllBoxes) {
-    //   this.checkAllBoxes.nativeElement.checked = value;
-    // }
-    // if (clear) {
-    //   this.selectedIds = [];
-    // }
+    this.selectAllIds = value;
+    if (this.checkAllBoxes) {
+      this.checkAllBoxes.nativeElement.checked = value;
+    }
+    if (clear) {
+      this.selectedIds = [];
+    }
   }
 
   searchBy(value: string) {
@@ -209,7 +199,7 @@ export class TableComponent implements OnInit, OnDestroy {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
-    dialogConfig.data = {type: type};
+    dialogConfig.data = {type};
     const dialogRef = this.dialog.open(ListModalComponent, dialogConfig);
     dialogRef.afterClosed().pipe(takeUntil(this.subscriptions$)).subscribe(
       data => {
