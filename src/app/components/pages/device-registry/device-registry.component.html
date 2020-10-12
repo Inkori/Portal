@@ -1,7 +1,7 @@
 <app-realm-selection [hide]="true" [pageName]="pageName"></app-realm-selection>
 
 <div *ngIf="isRealmSelected">
-  <button mat-button class="btn" [hidden]="selectedIds.length" (click)="generateCode()"><span>Generate activation code</span></button>
+  <button mat-button class="btn" [disabled]="!selectedIds.length" (click)="generateCode()"><span>Generate activation code</span></button>
 </div>
 
 <div class="mat-elevation-z8">

@@ -43,6 +43,8 @@ export const GROUP_SEARCH_RESPONSE_EMPTY_MESSAGE = 'Group with current search pa
 export const DEVICE_LIST_EMPTY_MESSAGE = 'This organisation doesn\'t have devices';
 export const DEVICE_SEARCH_RESPONSE_EMPTY_MESSAGE = 'Device with current search params doesn\'t exist';
 export const GDR_SEARCH_EMPTY_MESSAGE = 'Device info with current search params doesn\'t exist';
+export const ACT_CODE_ERROR_MESSAGE = 'Can\'t generate activation code for this device. Reason: ';
+export const ACT_CODE_MULTIPLE_ERROR_MESSAGE = 'Can\'t generate activation code for multiple device';
 
 
 // requests

@@ -65,6 +65,15 @@ export class GroupsPageRequest extends PageRequest {
   type: GroupType;
 }
 
+export class ActCodeRequest {
+  mt: string;
+  sn: string;
+}
+
+export class ActCodeResponse {
+  token: string;
+}
+
 export class Group {
   apps: string[];
   creatorId: string;

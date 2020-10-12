@@ -24,7 +24,6 @@ export class AddModalComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    console.log(this.data);
     this.modalType = this.data.type;
     if (this.modalType === DataType.GROUP){
       this.registrationTypeChange(TYPE_GROUP);

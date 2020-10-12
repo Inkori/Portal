@@ -4,13 +4,14 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {Device} from '../models/device';
 import {Observable} from 'rxjs';
 import {AddDeviceClaim, AddDeviceManual, Page} from '../models/common';
-import {PageRequest} from '../models/acc-management';
+import {ActCodeRequest, ActCodeResponse, PageRequest} from '../models/acc-management';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DeviceProfileService {
   url: string;
+  // https://api.naea1.uds-dev.lenovo.com/device-profile-service/lcp/apis/v1/devices/device-id/newAliasId
 
   constructor(private http: HttpClient) {
     this.url = Environment.portalUrl + '/device-profile-service/lcp/apis/v1/devices';
@@ -31,6 +32,10 @@ export class DeviceProfileService {
 
   addDeviceClaim(params: AddDeviceClaim): Observable<any> {
     return this.http.post(this.url + '/activation/claim', params);
+  }
+
+  getActivationCode(request: ActCodeRequest): Observable<ActCodeResponse>{
+    return this.http.get<ActCodeResponse>(this.url + '/activation/activation-code/mt/' + request.mt + '/sn/' + request.sn);
   }
 
   private getHttpParams(request: PageRequest): HttpParams {

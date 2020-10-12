@@ -36,6 +36,7 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {TableComponent} from './components/common/table/table.component';
 import {ListModalComponent} from './components/modals/list-modal/list-modal.component';
+import {InfoModalComponent} from './components/modals/info-modal/info-modal.component';
 
 
 @NgModule({
@@ -51,6 +52,7 @@ import {ListModalComponent} from './components/modals/list-modal/list-modal.comp
     AddModalComponent,
     TableComponent,
     ListModalComponent,
+    InfoModalComponent,
   ],
   imports: [
     HttpClientModule,
