@@ -63,6 +63,11 @@ export interface FormSupplier {
   props: Array<any>;
 }
 
+export interface TableSupplier {
+  id: string;
+  data: any;
+}
+
 export interface TableParams {
   param: any;
   name: string;

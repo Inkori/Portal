@@ -1,5 +1,5 @@
 import {Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, QueryList, ViewChild, ViewChildren} from '@angular/core';
-import {CommonDataSource, DataType, TableParams} from '../../../models/common';
+import {CommonDataSource, DataType, TableParams, TableSupplier} from '../../../models/common';
 import {takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
 import {GroupsDataSource} from '../data-source/groups-data-source';
@@ -47,7 +47,7 @@ export class TableComponent implements OnInit, OnDestroy {
   loading: boolean;
   emptyListMessage: string;
   emptySearchResponseMessage: string;
-  selectedIds = [];
+  selectedIds: TableSupplier[] = [];
   selectAllIds = false;
   sortDirection: boolean;
 
@@ -55,7 +55,7 @@ export class TableComponent implements OnInit, OnDestroy {
   @ViewChild('checkAll') checkAllBoxes: ElementRef;
   @ViewChildren('check') checkBoxes: QueryList<ElementRef>;
   @Input() dataSourceType: DataType;
-  @Output() idListEmitter = new EventEmitter<string[]>();
+  @Output() idListEmitter = new EventEmitter<TableSupplier[]>();
 
 
   constructor(private accManagement: AccountManagementService,
@@ -114,15 +114,15 @@ export class TableComponent implements OnInit, OnDestroy {
     }
   }
 
-  select(id: string, checked: boolean) {
-    if (checked && !this.selectedIds.find(value => value === id)) {
-      this.selectedIds.push(id);
+  select(id: string, data: any, checked: boolean) {
+    if (checked && !this.selectedIds.find(value => value.id === id)) {
+      this.selectedIds.push({id, data});
       if (!this.selectAllIds && !this.checkBoxes.find(value => !value.nativeElement.checked)) {
         this.selectAllCheckBoxes(true);
       }
     }
     if (!checked) {
-      this.selectedIds = this.selectedIds.filter(value => value !== id);
+      this.selectedIds = this.selectedIds.filter(value => value.id !== id);
       if (this.selectAllIds) {
         this.selectAllCheckBoxes(false);
       }
@@ -140,8 +140,8 @@ export class TableComponent implements OnInit, OnDestroy {
   }
 
   activateCheckBoxes() {
-    this.selectedIds.forEach(id => {
-      const box = this.checkBoxes.find(value => value.nativeElement.id === id);
+    this.selectedIds.forEach(el => {
+      const box = this.checkBoxes.find(value => value.nativeElement.id === el.id);
       if (box){ box.nativeElement.checked = true; }
     });
     if (!this.checkBoxes.find(el => !el.nativeElement.checked)) {
@@ -187,10 +187,12 @@ export class TableComponent implements OnInit, OnDestroy {
     }
     if (clear) {
       this.selectedIds = [];
+      this.idListEmitter.emit(this.selectedIds);
     }
   }
 
   searchBy(value: string) {
+    this.selectAllCheckBoxes(false, true);
     this.pageRequest.freeText = value;
     this.load();
   }
@@ -210,12 +212,13 @@ export class TableComponent implements OnInit, OnDestroy {
   }
 
   private assignGroupToDeviceBulk(data: any) {
-    const deviceIds = (this.dataSourceType === DataType.GROUP ? data : this.selectedIds).filter(val => val);
-    const groupIds = (this.dataSourceType === DataType.DEVICE ? data : this.selectedIds).filter(val => val);
+    const deviceIds = (this.dataSourceType === DataType.GROUP ? data : this.selectedIds).filter(val => val.id);
+    const groupIds = (this.dataSourceType === DataType.DEVICE ? data : this.selectedIds).filter(val => val.id);
     if (deviceIds.length < 1 || groupIds.length < 1) {
-      this.alertService.showAlertMessage(EMPTY_ID_ARR_ERROR_MESSAGE, null, ALERT_DANGER); return;
+      this.alertService.showAlertMessage(EMPTY_ID_ARR_ERROR_MESSAGE, null, ALERT_DANGER);
+      return;
     }
-    this.accManagement.assignGroupsBulk(deviceIds.map(id => ({deviceId: id})), groupIds)
+    this.accManagement.assignGroupsBulk(deviceIds.map(obj => ({deviceId: obj.id})), groupIds.map(obj => obj.id))
       .pipe(takeUntil(this.subscriptions$))
       .subscribe({
         next: () => {

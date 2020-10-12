@@ -12,7 +12,7 @@
     <ng-container matColumnDef="{{displayedColumns[0].param}}">
       <mat-header-cell *matHeaderCellDef><input #checkAll type="checkbox" (change)="selectAll(checkAll.checked)"></mat-header-cell>
       <mat-cell *matCellDef="let row"><input #check id='{{ row[displayedColumns[0].param] }}' type="checkbox"
-                                             (change)="select(row[displayedColumns[0].param], check.checked)">
+                                             (change)="select(row[displayedColumns[0].param], row, check.checked)">
       </mat-cell>
     </ng-container>
 

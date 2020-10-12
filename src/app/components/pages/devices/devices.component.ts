@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {AccountManagementService} from '../../../services/account-management.service';
 import {DeviceProfileService} from '../../../services/device-profile.service';
-import {AddDeviceModalRequest, DataType} from '../../../models/common';
+import {AddDeviceModalRequest, DataType, TableSupplier} from '../../../models/common';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {AlertService} from '../../../services/alert.service';
 import {takeUntil} from 'rxjs/operators';
@@ -26,7 +26,7 @@ import {
 export class DevicesComponent implements OnInit, OnDestroy {
   private readonly subscriptions$ = new Subject<void>();
   isRealmSelected: boolean;
-  selectedIds: string[] = [];
+  selectedIds: TableSupplier[] = [];
   pageName = 'Device page';
   dataSourceType = DataType.DEVICE;
   @ViewChild(TableComponent) tableComponent: TableComponent;
@@ -52,7 +52,7 @@ export class DevicesComponent implements OnInit, OnDestroy {
 
 
   delete() {
-    this.deviceProfileService.deleteDevices(this.selectedIds).pipe(takeUntil(this.subscriptions$)).subscribe({
+    this.deviceProfileService.deleteDevices(this.selectedIds.map(value => value.data.orgDeviceId)).pipe(takeUntil(this.subscriptions$)).subscribe({
       next: () => {
         this.tableComponent.pageRequest.pageNumber = 0;
         this.tableComponent.pageRequest.freeText = '';
@@ -111,7 +111,7 @@ export class DevicesComponent implements OnInit, OnDestroy {
     this.tableComponent.assign(DataType.GROUP);
   }
 
-  getIdList(idList: string[]) {
+  getIdList(idList: TableSupplier[]) {
     this.selectedIds = idList;
   }
 }

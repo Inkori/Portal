@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {DataType} from '../../../models/common';
+import {DataType, TableSupplier} from '../../../models/common';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {TableComponent} from '../../common/table/table.component';
 import {AddModalComponent} from '../../modals/add-modal/add-modal.component';
@@ -25,7 +25,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
   pageName = 'Groups page';
   dataSourceType = DataType.GROUP;
   isRealmSelected: boolean;
-  selectedIds = [];
+  selectedIds: TableSupplier[] = [];
 
   @ViewChild(TableComponent) tableComponent: TableComponent;
 
@@ -44,7 +44,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
     this.subscriptions$.complete();
   }
 
-  getIdList(idList: string[]) {
+  getIdList(idList: TableSupplier[]) {
     this.selectedIds = idList;
   }
 
@@ -82,7 +82,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
   }
 
   delete() {
-   this.accManagement.deleteGroup({groupList: this.selectedIds}).pipe(takeUntil(this.subscriptions$)).subscribe(responce => {
+   this.accManagement.deleteGroup({groupList: this.selectedIds.map(value => value.id)}).pipe(takeUntil(this.subscriptions$)).subscribe(responce => {
         this.alertService.showAlertMessage(GROUP_DELETE_MESSAGE);
         this.tableComponent.load();
       },

@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {GdrService} from '../../../services/gdr.service';
-import {DataType} from '../../../models/common';
+import {DataType, TableSupplier} from '../../../models/common';
 import {takeUntil} from 'rxjs/operators';
 import {AccountManagementService} from '../../../services/account-management.service';
 import {Subject} from 'rxjs';
@@ -20,8 +20,7 @@ export class DeviceRegistryComponent implements OnInit, OnDestroy {
   pageName = 'Device Registry';
   dataSourceType = DataType.GDR;
   isRealmSelected: boolean;
-  selectedIds = [];
-
+  selectedIds: TableSupplier[] = [];
 
   constructor(
     private gdrService: GdrService,
@@ -43,7 +42,7 @@ export class DeviceRegistryComponent implements OnInit, OnDestroy {
     this.subscriptions$.complete();
   }
 
-  getIdList(idList: string[]) {
+  getIdList(idList: TableSupplier[]) {
     this.selectedIds = idList;
   }
 
@@ -52,7 +51,7 @@ export class DeviceRegistryComponent implements OnInit, OnDestroy {
       this.alertService.showAlertMessage(ACT_CODE_MULTIPLE_ERROR_MESSAGE, null, ALERT_DANGER);
       return;
     }
-    this.deviceProfileService.getActivationCode(this.createActRequest())
+    this.deviceProfileService.getActivationCode({mt: this.selectedIds[0].data.mt, sn: this.selectedIds[0].data.sn})
       .pipe(takeUntil(this.subscriptions$))
       .subscribe(data => {
         const dialogConfig = new MatDialogConfig();
@@ -63,10 +62,5 @@ export class DeviceRegistryComponent implements OnInit, OnDestroy {
       }, error => {
         this.alertService.showAlertMessage(ACT_CODE_ERROR_MESSAGE, error);
       });
-  }
-
-  private createActRequest() {
-    return {mt: 'VR-S3', sn: 'ghbcv'};
-
   }
 }
