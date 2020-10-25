@@ -2,7 +2,6 @@
 
 <div *ngIf="isRealmSelected">
   <button mat-button class="btn" (click)="addDevice()"><span>Add new device</span></button>
-  <button mat-button class="btn" [disabled]="!selectedIds.length"><span>Deploy</span></button>
   <button mat-button class="btn" [disabled]="!selectedIds.length" (click)="assignGroup()"><span>Group</span></button>
   <button mat-button class="btn" [disabled]="!selectedIds.length"><span>Settings</span></button>
   <button mat-button class="btn" [disabled]="!selectedIds.length" (click)="delete()"><span>Delete</span>
