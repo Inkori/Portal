@@ -1,10 +1,10 @@
-import {Device} from '../../../models/device';
-import {Observable, Subject} from 'rxjs';
-import {DeviceProfileService} from '../../../services/device-profile.service';
-import {CommonDataSource, Page, PageInner} from '../../../models/common';
-import {finalize, map, pluck, takeUntil} from 'rxjs/operators';
 import {OnDestroy} from '@angular/core';
+import {Observable, Subject} from 'rxjs';
+import {finalize, map, pluck, takeUntil} from 'rxjs/operators';
 import {CommonResponse, PageRequest} from '../../../models/acc-management';
+import {CommonDataSource, Page, PageInner} from '../../../models/common';
+import {Device} from '../../../models/device';
+import {DeviceProfileService} from '../../../services/device-profile.service';
 
 export class DeviceDataSource<T> extends CommonDataSource<Device> implements OnDestroy {
   private readonly subscriptions$ = new Subject<void>();
@@ -18,24 +18,24 @@ export class DeviceDataSource<T> extends CommonDataSource<Device> implements OnD
     super();
   }
 
-  connect(): Observable<Device[]> {
+  public connect(): Observable<Device[]> {
     return this.page$.pipe(pluck('content'));
   }
 
-  disconnect(): void {
+  public disconnect(): void {
     this.devicesSubject.complete();
     this.loadingSubject.complete();
   }
 
-  load(request: PageRequest) {
+  public load(request: PageRequest) {
     this.loadingSubject.next(true);
 
     this.deviceProfileService.getDevicesFromApi(request)
       .pipe(
-        map(data => ({content: data.content, page: this.createPage(data)})),
+        map((data) => ({content: data.content, page: this.createPage(data)})),
         finalize(() => this.loadingSubject.next(false)),
         takeUntil(this.subscriptions$))
-      .subscribe(devices => {
+      .subscribe((devices) => {
         this.devicesSubject.next(devices);
       });
   }
@@ -44,7 +44,7 @@ export class DeviceDataSource<T> extends CommonDataSource<Device> implements OnD
     return {number: data.number, size: data.size, totalElements: data.totalElements, totalPages: data.totalPages};
   }
 
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     this.subscriptions$.next();
     this.subscriptions$.complete();
   }

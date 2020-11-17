@@ -1,9 +1,9 @@
+import {OnDestroy} from '@angular/core';
 import {Observable, Subject} from 'rxjs';
 import {finalize, pluck, takeUntil} from 'rxjs/operators';
-import {OnDestroy} from '@angular/core';
-import {AccountManagementService} from '../../../services/account-management.service';
 import {Group, GroupsPageRequest, GroupsResponse} from '../../../models/acc-management';
 import {CommonDataSource} from '../../../models/common';
+import {AccountManagementService} from '../../../services/account-management.service';
 
 export class GroupsDataSource<T> extends CommonDataSource<Group> implements OnDestroy {
   private readonly subscriptions$ = new Subject<void>();
@@ -17,28 +17,28 @@ export class GroupsDataSource<T> extends CommonDataSource<Group> implements OnDe
     super();
   }
 
-  connect(): Observable<Group[]> {
+  public connect(): Observable<Group[]> {
     return this.page$.pipe(pluck('_embedded', 'groupList'));
   }
 
-  disconnect(): void {
+  public disconnect(): void {
     this.groupsSubject.complete();
     this.loadingSubject.complete();
   }
 
-  load(request: GroupsPageRequest) {
+  public load(request: GroupsPageRequest) {
     this.loadingSubject.next(true);
 
     this.accountManagementService.getGroupsList(request)
       .pipe(
         finalize(() => this.loadingSubject.next(false)),
         takeUntil(this.subscriptions$))
-      .subscribe(groups => {
+      .subscribe((groups) => {
         this.groupsSubject.next(groups);
       });
   }
 
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     this.subscriptions$.next();
     this.subscriptions$.complete();
   }

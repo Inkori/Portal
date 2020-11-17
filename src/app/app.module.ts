@@ -1,43 +1,49 @@
-import {BrowserModule} from '@angular/platform-browser';
 import {APP_INITIALIZER, NgModule} from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
 
+import {LayoutModule} from '@angular/cdk/layout';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {ExtendedModule, FlexModule} from '@angular/flex-layout';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {MatButtonModule} from '@angular/material/button';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {MatCardModule} from '@angular/material/card';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatGridListModule} from '@angular/material/grid-list';
+import {MatIconModule} from '@angular/material/icon';
+import {MatInputModule} from '@angular/material/input';
+import {MatListModule} from '@angular/material/list';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatSortModule} from '@angular/material/sort';
+import {MatTableModule} from '@angular/material/table';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {KeycloakAngularModule, KeycloakService} from 'keycloak-angular';
+import {ChartsModule} from 'ng2-charts';
+import {initializer} from '../appInit';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {HomeComponent} from './components/pages/home/home.component';
-import {DevicesComponent} from './components/pages/devices/devices.component';
-import {DeviceRegistryComponent} from './components/pages/device-registry/device-registry.component';
-import {GroupsComponent} from './components/pages/groups/groups.component';
-import {ErrorPageComponent} from './components/pages/error-page/error-page.component';
-import {KeycloakAngularModule, KeycloakService} from 'keycloak-angular';
-import {initializer} from '../appInit';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {LayoutModule} from '@angular/cdk/layout';
-import {MatToolbarModule} from '@angular/material/toolbar';
-import {MatButtonModule} from '@angular/material/button';
-import {MatSidenavModule} from '@angular/material/sidenav';
-import {MatIconModule} from '@angular/material/icon';
-import {MatListModule} from '@angular/material/list';
-import {SubscriptionBarComponent} from './components/common/subscription-bar/subscription-bar.component';
-import {MatMenuModule} from '@angular/material/menu';
-import {ExtendedModule, FlexModule} from '@angular/flex-layout';
+import {BarComponent} from './components/common/charts/bar/bar.component';
+import {LineComponent} from './components/common/charts/line/line.component';
+import {PieComponent} from './components/common/charts/pie/pie.component';
+import {RadarComponent} from './components/common/charts/radar/radar.component';
 import {RealmSelectionComponent} from './components/common/realm-selection/realm-selection.component';
-import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
-import {SubscriptionInterceptor} from './interseptors/auth-interseptor';
-import {MatTableModule} from '@angular/material/table';
-import {MatPaginatorModule} from '@angular/material/paginator';
-import {MatInputModule} from '@angular/material/input';
-import {MatSortModule} from '@angular/material/sort';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import {MatButtonToggleModule} from '@angular/material/button-toggle';
-import {MatDialogModule} from '@angular/material/dialog';
-import {AddModalComponent} from './components/modals/add-modal/add-modal.component';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {MatSnackBarModule} from '@angular/material/snack-bar';
-import {MatCheckboxModule} from '@angular/material/checkbox';
+import {SubscriptionBarComponent} from './components/common/subscription-bar/subscription-bar.component';
 import {TableComponent} from './components/common/table/table.component';
-import {ListModalComponent} from './components/modals/list-modal/list-modal.component';
+import {AddModalComponent} from './components/modals/add-modal/add-modal.component';
 import {InfoModalComponent} from './components/modals/info-modal/info-modal.component';
-
+import {ListModalComponent} from './components/modals/list-modal/list-modal.component';
+import {DeviceRegistryComponent} from './components/pages/device-registry/device-registry.component';
+import {DevicesComponent} from './components/pages/devices/devices.component';
+import {ErrorPageComponent} from './components/pages/error-page/error-page.component';
+import {GroupsComponent} from './components/pages/groups/groups.component';
+import {HomeComponent} from './components/pages/home/home.component';
+import {SubscriptionInterceptor} from './interseptors/auth-interseptor';
 
 @NgModule({
   declarations: [
@@ -53,6 +59,10 @@ import {InfoModalComponent} from './components/modals/info-modal/info-modal.comp
     TableComponent,
     ListModalComponent,
     InfoModalComponent,
+    PieComponent,
+    RadarComponent,
+    LineComponent,
+    BarComponent,
   ],
   imports: [
     HttpClientModule,
@@ -79,7 +89,10 @@ import {InfoModalComponent} from './components/modals/info-modal/info-modal.comp
     FormsModule,
     ReactiveFormsModule,
     MatSnackBarModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatGridListModule,
+    MatCardModule,
+    ChartsModule,
   ],
   providers: [
     {provide: APP_INITIALIZER, useFactory: initializer, multi: true, deps: [KeycloakService]},

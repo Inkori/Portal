@@ -1,4 +1,4 @@
-export class Subscription{
-  name: string;
-  id: string;
+export class Subscription {
+  public name: string;
+  public id: string;
 }

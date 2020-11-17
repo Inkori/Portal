@@ -1,31 +1,31 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {AccountManagementService} from '../../../services/account-management.service';
-import {AuthService} from '../../../services/auth.service';
-import {Organization} from '../../../models/acc-management';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
+import {Organization} from '../../../models/acc-management';
+import {AccountManagementService} from '../../../services/account-management.service';
+import {AuthService} from '../../../services/auth.service';
 
 @Component({
   selector: 'app-realm-selection',
   templateUrl: './realm-selection.component.html',
-  styleUrls: ['./realm-selection.component.css']
+  styleUrls: ['./realm-selection.component.css'],
 })
 export class RealmSelectionComponent implements OnInit, OnDestroy {
   private readonly subscriptions$ = new Subject<void>();
-  realmList: Organization[];
-  isRealmSelected: boolean;
-  isSubscriptionSelected: boolean;
-  currentRealm: string;
+  public realmList: Organization[];
+  public isRealmSelected: boolean;
+  public isSubscriptionSelected: boolean;
+  public currentRealm: string;
 
   constructor(
     private auth: AuthService,
     private accManagement: AccountManagementService) {
   }
 
-  @Input() pageName: string;
-  @Input() hide: boolean;
+  @Input() public pageName: string;
+  @Input() public hide: boolean;
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
 
     this.realmList = this.accManagement.getRealmsInOrg();
     this.isSubscriptionSelected = this.accManagement.isSubscriptionSelected();
@@ -33,16 +33,16 @@ export class RealmSelectionComponent implements OnInit, OnDestroy {
     if (this.isRealmSelected) {
       this.currentRealm = this.accManagement.getCurrentRealm().name;
     }
-    this.accManagement.orgListUpdateEvent$.pipe( takeUntil(this.subscriptions$) ).subscribe(data => {
-      this.accManagement.getRealmsFromApi(data).pipe( takeUntil(this.subscriptions$) ).subscribe(response => {
+    this.accManagement.orgListUpdateEvent$.pipe( takeUntil(this.subscriptions$) ).subscribe((data) => {
+      this.accManagement.getRealmsFromApi(data).pipe( takeUntil(this.subscriptions$) ).subscribe((response) => {
         this.realmList = response;
         this.accManagement.setRealmsInOrg(response);
       });
     });
-    this.accManagement.currentSubscription$.pipe( takeUntil(this.subscriptions$) ).subscribe(data => {
+    this.accManagement.currentSubscription$.pipe( takeUntil(this.subscriptions$) ).subscribe((data) => {
       this.isSubscriptionSelected = !!data;
     });
-    this.accManagement.currentRealm$.pipe( takeUntil(this.subscriptions$) ).subscribe(data => {
+    this.accManagement.currentRealm$.pipe( takeUntil(this.subscriptions$) ).subscribe((data) => {
       this.isRealmSelected = !!data;
       if (!!!data) {
         this.currentRealm = null;
@@ -50,18 +50,18 @@ export class RealmSelectionComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     this.subscriptions$.next();
     this.subscriptions$.complete();
   }
 
-  setCurrentRealm(realm: Organization): void {
+  public setCurrentRealm(realm: Organization): void {
     this.accManagement.setCurrentRealm(realm);
     this.isRealmSelected = !!realm;
     this.currentRealm = realm.name;
   }
 
-  reloadPage() {
+  public reloadPage() {
     this.accManagement.reloadRage();
   }
 }

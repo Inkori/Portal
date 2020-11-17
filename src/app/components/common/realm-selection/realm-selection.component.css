@@ -3,10 +3,12 @@
   justify-content: flex-end;
   margin-right: 1px;
 }
-.center{
+
+.center {
   position: absolute;
   left: 45%;
 }
+
 .btn {
   height: 40px;
   top: 1px;
@@ -15,15 +17,16 @@
   color: rgb(255, 255, 255);
   background-color: rgb(43, 43, 43);
 }
+
 .btn:hover {
   cursor: pointer;
 }
 
 .btn:active {
   top: 1px;
-  background: linear-gradient(rgb(76,77,82), rgb(56,57,62)) rgb(76,77,82);
-  box-shadow:
-    0 0 1px rgba(0,0,0,.5) inset,
-    0 2px 3px rgba(0,0,0,.5) inset,
-    0 1px 1px rgba(255,255,255,.1);}
+  background: linear-gradient(rgb(76, 77, 82), rgb(56, 57, 62)) rgb(76, 77, 82);
+  box-shadow: 0 0 1px rgba(0, 0, 0, .5) inset,
+  0 2px 3px rgba(0, 0, 0, .5) inset,
+  0 1px 1px rgba(255, 255, 255, .1);
+}
 

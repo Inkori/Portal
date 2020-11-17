@@ -10,7 +10,8 @@
   </div>
   <mat-table class="mat-elevation-z8" [dataSource]="dataSource">
     <ng-container matColumnDef="{{displayedColumns[0].param}}">
-      <mat-header-cell *matHeaderCellDef><input #checkAll type="checkbox" (change)="selectAll(checkAll.checked)"></mat-header-cell>
+      <mat-header-cell *matHeaderCellDef><input #checkAll type="checkbox" (change)="selectAll(checkAll.checked)">
+      </mat-header-cell>
       <mat-cell *matCellDef="let row"><input #check id='{{ row[displayedColumns[0].param] }}' type="checkbox"
                                              (change)="select(row[displayedColumns[0].param], row, check.checked)">
       </mat-cell>
@@ -18,14 +19,16 @@
 
     <div *ngFor="let col of displayedColumns; let i=index">
       <ng-container matColumnDef="{{ col.name }}" *ngIf="i != 0">
-        <mat-header-cell [ngClass]="{'activated': !col.sortDisable}" *matHeaderCellDef (click)="sort(col.param, col.sortDisable)">{{ col.name }}</mat-header-cell>
+        <mat-header-cell [ngClass]="{'activated': !col.sortDisable}" *matHeaderCellDef
+                         (click)="sort(col.param, col.sortDisable)">{{ col.name }}</mat-header-cell>
         <mat-cell *matCellDef="let row">
           <div *ngIf="isArray(row[col.param]);else str">
             <div *ngFor="let element of row[col.param]">
               <div>{{ getInnerData(element) }}</div>
             </div>
           </div>
-          <ng-template #str>{{ isArray(col.param) ? row[col.param[0]][col.param[1]] : row[col.param] }} </ng-template></mat-cell>
+          <ng-template #str>{{ isArray(col.param) ? row[col.param[0]][col.param[1]] : row[col.param] }} </ng-template>
+        </mat-cell>
       </ng-container>
     </div>
 

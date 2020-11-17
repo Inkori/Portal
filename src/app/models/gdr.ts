@@ -1,27 +1,27 @@
 import {Page} from './common';
 
 export class GdrDeviceResponse implements Page<GdrDevice> {
-  readonly content: GdrDevice[];
-  readonly number: number;
-  readonly size: number;
-  readonly totalElements: number;
-  readonly totalPages: number;
+  public readonly content: GdrDevice[];
+  public readonly number: number;
+  public readonly size: number;
+  public readonly totalElements: number;
+  public readonly totalPages: number;
 }
 
 export class GdrDevice {
-  device_id: string;
-  lcp_deviceKey_pub: PublicKey;
-  mt: string;
-  mtm: string;
-  sn: string;
-  name: string;
-  mfr: string;
-  enclosure: string;
-  family: string;
+  public device_id: string;
+  public lcp_deviceKey_pub: PublicKey;
+  public mt: string;
+  public mtm: string;
+  public sn: string;
+  public name: string;
+  public mfr: string;
+  public enclosure: string;
+  public family: string;
 }
 
 export class PublicKey {
-  key: string;
-  keyEncoding: string;
-  type: string;
+  public key: string;
+  public keyEncoding: string;
+  public type: string;
 }

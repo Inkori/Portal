@@ -1,3 +1,37 @@
-<div class="wrapper">
-<p>Home page</p>
+<app-realm-selection [pageName]="pageName"></app-realm-selection>
+<div class="spinner-container spinner-center" *ngIf="loading">
+  <mat-spinner></mat-spinner>
+</div>
+<div [ngClass]="{'hide': loading || !isRealmSelected}">
+  <div class="grid-container">
+    <mat-grid-list cols="{{ ( cards | async )?.columns }}" rowHeight="200px">
+      <!--    &lt;!&ndash;Mini Cards&ndash;&gt;-->
+      <!--    <mat-grid-tile *ngFor="let i of [1, 2, 3, 4]" [colspan]="( cardLayout | async )?.miniCard.cols"-->
+      <!--                   [rowspan]="( cardLayout | async )?.miniCard.rows">-->
+      <!--      <app-card title="Card {{i}}"><div>Mini Card Content Here</div></app-card>-->
+      <!--    </mat-grid-tile>-->
+      <mat-grid-tile *ngFor="let el of chartInfo" [colspan]="( cards | async )?.chart.cols"
+                     [rowspan]="( cards | async )?.chart.rows">
+        <mat-card class="dashboard-card">
+          <mat-card-header>
+            <mat-card-title>
+              {{el.title}} stat
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content class="dashboard-card-content">
+            <div *ngIf="el.total;else noEl">
+              <app-pie [labels]="el.labels" [chartData]="el.chartData"></app-pie>
+              <div class="total-block">
+                <div class="total-el" *ngFor="let elem of el.labels; let i = index">
+                  {{elem}}: {{getPercent(el.chartData, el.chartData[i])}}%
+                </div>
+                <div class="total-el">Total {{el.title}}: {{el.total}}</div>
+              </div>
+            </div>
+            <ng-template #noEl>No data found</ng-template>
+          </mat-card-content>
+        </mat-card>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </div>
 </div>

@@ -1,10 +1,10 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {GroupsComponent} from './components/pages/groups/groups.component';
-import {HomeComponent} from './components/pages/home/home.component';
 import {DeviceRegistryComponent} from './components/pages/device-registry/device-registry.component';
 import {DevicesComponent} from './components/pages/devices/devices.component';
 import {ErrorPageComponent} from './components/pages/error-page/error-page.component';
+import {GroupsComponent} from './components/pages/groups/groups.component';
+import {HomeComponent} from './components/pages/home/home.component';
 import {AppAuthGuard} from './guards/app-auth-guard';
 
 

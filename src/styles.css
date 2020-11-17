@@ -1,26 +1,32 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
+html, body {
+  height: 100%;
+}
+
 body {
   position: relative;
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif; }
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
 .alert-danger {
   background-color: #f80250;
   color: #211b19;
   font-weight: bold;
 }
+
 .alert-success {
   background-color: #7ed777;
   color: #211b19;
   font-weight: bold;
 }
-.hide{
+
+.hide {
   visibility: hidden;
 }
 
-.spinner-center{
+.spinner-center {
   position: absolute;
   left: 50%;
   top: 200px;
@@ -31,6 +37,18 @@ body {
   justify-content: flex-end;
   margin-right: 1px;
   height: 40px;
-  /*width: 70px;*/
+}
+
+.chartContainer canvas {
+  max-height: 300px;
+  max-width: 400px;
+}
+
+.chartContainer {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 

@@ -1,35 +1,35 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {AccountManagementService} from '../../../services/account-management.service';
-import {DeviceProfileService} from '../../../services/device-profile.service';
-import {AddDeviceModalRequest, DataType, TableSupplier} from '../../../models/common';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import {AlertService} from '../../../services/alert.service';
-import {takeUntil} from 'rxjs/operators';
-import {Subject} from 'rxjs';
 import {saveAs} from 'file-saver';
-import {AddModalComponent} from '../../modals/add-modal/add-modal.component';
-import {TableComponent} from '../../common/table/table.component';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 import {
   AIM_AUTO,
   DEVICE_ADD_ERROR_MESSAGE,
   DEVICE_ADD_MESSAGE,
   DEVICE_DELETE_ERROR_MESSAGE,
   DEVICE_DELETE_MESSAGE,
-  MT_VR_S3
+  MT_VR_S3,
 } from '../../../constants/constants';
+import {AddDeviceModalRequest, DataType, TableSupplier} from '../../../models/common';
+import {AccountManagementService} from '../../../services/account-management.service';
+import {AlertService} from '../../../services/alert.service';
+import {DeviceProfileService} from '../../../services/device-profile.service';
+import {TableComponent} from '../../common/table/table.component';
+import {AddModalComponent} from '../../modals/add-modal/add-modal.component';
 
 @Component({
   selector: 'app-devices',
   templateUrl: './devices.component.html',
-  styleUrls: ['./devices.component.css']
+  styleUrls: ['./devices.component.css'],
 })
 export class DevicesComponent implements OnInit, OnDestroy {
   private readonly subscriptions$ = new Subject<void>();
-  isRealmSelected: boolean;
-  selectedIds: TableSupplier[] = [];
-  pageName = 'Device page';
-  dataSourceType = DataType.DEVICE;
-  @ViewChild(TableComponent) tableComponent: TableComponent;
+  public isRealmSelected: boolean;
+  public selectedIds: TableSupplier[] = [];
+  public pageName = 'Device page';
+  public dataSourceType = DataType.DEVICE;
+  @ViewChild(TableComponent) public tableComponent: TableComponent;
 
   constructor(
     private dialog: MatDialog,
@@ -38,40 +38,39 @@ export class DevicesComponent implements OnInit, OnDestroy {
     private alertService: AlertService) {
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     this.isRealmSelected = this.accManagement.isRealmSelected();
-    this.accManagement.currentRealm$.pipe(takeUntil(this.subscriptions$)).subscribe(data => {
+    this.accManagement.currentRealm$.pipe(takeUntil(this.subscriptions$)).subscribe((data) => {
       this.isRealmSelected = !!data;
     });
   }
 
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     this.subscriptions$.next();
     this.subscriptions$.complete();
   }
 
-
-  delete() {
-    this.deviceProfileService.deleteDevices(this.selectedIds.map(value => value.data.orgDeviceId)).pipe(takeUntil(this.subscriptions$)).subscribe({
+  public delete() {
+    this.deviceProfileService.deleteDevices(this.selectedIds.map((value) => value.data.orgDeviceId)).pipe(takeUntil(this.subscriptions$)).subscribe({
       next: () => {
         this.tableComponent.pageRequest.pageNumber = 0;
         this.tableComponent.pageRequest.freeText = '';
         this.tableComponent.load();
         this.alertService.showAlertMessage(DEVICE_DELETE_MESSAGE);
       },
-      error: (error) => this.alertService.showAlertMessage(DEVICE_DELETE_ERROR_MESSAGE, error)
+      error: (error) => this.alertService.showAlertMessage(DEVICE_DELETE_ERROR_MESSAGE, error),
     });
   }
 
 // modals
-  addDevice() {
+  public addDevice() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.data = {type: DataType.DEVICE};
     const dialogRef = this.dialog.open(AddModalComponent, dialogConfig);
     dialogRef.afterClosed().pipe(takeUntil(this.subscriptions$)).subscribe(
-      data => this.addDeviceToPortal(data)
+      (data) => this.addDeviceToPortal(data),
     );
   }
 
@@ -90,28 +89,28 @@ export class DevicesComponent implements OnInit, OnDestroy {
           this.alertService.showAlertMessage(DEVICE_ADD_MESSAGE);
           this.tableComponent.load();
         },
-        error: error => this.alertService.showAlertMessage(DEVICE_ADD_ERROR_MESSAGE, error)
+        error: (error) => this.alertService.showAlertMessage(DEVICE_ADD_ERROR_MESSAGE, error),
       });
     } else {
       this.deviceProfileService.addDeviceManually([{
         deviceName: data.form.deviceName,
         deviceSerialnumber: data.form.serialNumber,
-      }]).pipe(takeUntil(this.subscriptions$)).subscribe(responce => {
+      }]).pipe(takeUntil(this.subscriptions$)).subscribe((responce) => {
           saveAs(new Blob([responce]), 'devices.zip');
           this.alertService.showAlertMessage(DEVICE_ADD_MESSAGE);
           this.tableComponent.load();
         },
-        error => {
+        (error) => {
           this.alertService.showAlertMessage(DEVICE_ADD_ERROR_MESSAGE, error);
         });
     }
   }
 
-  assignGroup() {
+  public assignGroup() {
     this.tableComponent.assign(DataType.GROUP);
   }
 
-  getIdList(idList: TableSupplier[]) {
+  public getIdList(idList: TableSupplier[]) {
     this.selectedIds = idList;
   }
 }

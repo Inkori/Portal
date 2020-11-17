@@ -1,16 +1,16 @@
-import {Injectable} from '@angular/core';
 import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
+import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
-import {AccountManagementService} from '../services/account-management.service';
-import {X_SUBSCRIPTION, X_TENANT} from '../constants/constants';
 import {tap} from 'rxjs/operators';
+import {X_SUBSCRIPTION, X_TENANT} from '../constants/constants';
+import {AccountManagementService} from '../services/account-management.service';
 import {AuthService} from '../services/auth.service';
 
 @Injectable()
 export class SubscriptionInterceptor implements HttpInterceptor {
 
-  const;
-  XTENANT_EXCLUDED_URLS = [
+  public const;
+  public XTENANT_EXCLUDED_URLS = [
     '/organization',
     '/myProfile',
   ];
@@ -18,11 +18,11 @@ export class SubscriptionInterceptor implements HttpInterceptor {
   constructor(private accManagement: AccountManagementService, private authService: AuthService) {
   }
 
-  isXtenantForbidden(request: HttpRequest<any>): boolean {
+  public isXtenantForbidden(request: HttpRequest<any>): boolean {
     return this.XTENANT_EXCLUDED_URLS.every((url) => !request.url.includes(url));
   }
 
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+  public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const subscriptionId = this.accManagement.getSubscription();
     const realm = this.accManagement.getCurrentRealm();
 

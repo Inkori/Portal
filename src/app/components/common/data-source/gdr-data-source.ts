@@ -1,10 +1,10 @@
+import {OnDestroy} from '@angular/core';
 import {Observable, Subject} from 'rxjs';
 import {finalize, map, pluck, takeUntil} from 'rxjs/operators';
-import {OnDestroy} from '@angular/core';
+import {CommonResponse, PageRequest} from '../../../models/acc-management';
 import {CommonDataSource, Page, PageInner} from '../../../models/common';
 import {GdrDevice} from '../../../models/gdr';
 import {GdrService} from '../../../services/gdr.service';
-import {CommonResponse, PageRequest} from '../../../models/acc-management';
 
 export class GdrDataSource<T> extends CommonDataSource<GdrDevice> implements OnDestroy {
   private readonly subscriptions$ = new Subject<void>();
@@ -18,45 +18,45 @@ export class GdrDataSource<T> extends CommonDataSource<GdrDevice> implements OnD
     super();
   }
 
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     this.subscriptions$.next();
     this.subscriptions$.complete();
   }
 
-  connect(): Observable<GdrDevice[]> {
+  public connect(): Observable<GdrDevice[]> {
     return this.page$.pipe(pluck('content'));
   }
 
-  disconnect(): void {
+  public disconnect(): void {
     this.responseSubject.complete();
     this.loadingSubject.complete();
   }
 
-  load(request: PageRequest) {
+  public load(request: PageRequest) {
     this.loadingSubject.next(true);
     if (!request.freeText) {
       this.gdrService.getDevicesGdr(request)
         .pipe(
-          map(data  => ({content: data.content, page: this.createPage(data)})),
+          map((data)  => ({content: data.content, page: this.createPage(data)})),
           finalize(() => this.loadingSubject.next(false)),
           takeUntil(this.subscriptions$))
-        .subscribe(data => {
+        .subscribe((data) => {
           this.responseSubject.next(data);
         });
     } else {
       this.gdrService.search(request)
         .pipe(
-          map(data  => ({content: data.content, page: this.createPage(data)})),
+          map((data)  => ({content: data.content, page: this.createPage(data)})),
           finalize(() => this.loadingSubject.next(false)),
           takeUntil(this.subscriptions$))
-        .subscribe(data => {
+        .subscribe((data) => {
           this.responseSubject.next(data);
         });
     }
 
   }
-  private createPage(data: Page<any>): PageInner{
-    return {number: data.number, size: data.size, totalElements: data.totalElements, totalPages: data.totalPages }
+  private createPage(data: Page<any>): PageInner {
+    return {number: data.number, size: data.size, totalElements: data.totalElements, totalPages: data.totalPages };
   }
 
 }

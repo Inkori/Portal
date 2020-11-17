@@ -1,5 +1,5 @@
-import {FormGroup} from '@angular/forms';
 import {DataSource} from '@angular/cdk/collections';
+import {FormGroup} from '@angular/forms';
 import {Observable} from 'rxjs';
 
 export interface Page<T> {
@@ -17,7 +17,6 @@ export interface PageInner {
   readonly totalElements: number;
   readonly totalPages: number;
 }
-
 
 export interface AddDeviceManual {
   deviceName?: string;
@@ -41,14 +40,14 @@ export interface DeviceIdInfo {
 }
 
 export interface GroupAddParam {
-  disableIdentityIntegration: boolean,
-  displayName: string,
-  name: string,
-  type: string
+  disableIdentityIntegration: boolean;
+  displayName: string;
+  name: string;
+  type: string;
 }
 
 export interface GroupDeleteParam {
-  groupList: string[]
+  groupList: string[];
 }
 
 export interface GdrRequestParam {
@@ -81,10 +80,8 @@ export enum DataType {
 }
 
 export abstract class CommonDataSource<T> extends DataSource<T> {
-  page$: Observable<any>;
-  loadingSubject$: Observable<boolean>;
+  public page$: Observable<any>;
+  public loadingSubject$: Observable<boolean>;
 
-  abstract load(request: any): void;
+  public abstract load(request: any): void;
 }
-
-

@@ -20,7 +20,6 @@ export const DEVICE_COMMON_UPPER_CASE_ERROR_MESSAGE = 'You can use only numbers 
 export const COMMON_NAME_ERROR_MESSAGE = 'You can use numbers, letters, underscore, space';
 export const REGISTRATION_TITLES = {auto: 'Auto registration', manual: 'Manual registration', group: 'Add group'};
 
-
 // registration forms
 export const AIM_AUTO = 'Auto';
 export const TYPE_TEXT = 'text';
@@ -46,16 +45,15 @@ export const GDR_SEARCH_EMPTY_MESSAGE = 'Device info with current search params 
 export const ACT_CODE_ERROR_MESSAGE = 'Can\'t generate activation code for this device. Reason: ';
 export const ACT_CODE_MULTIPLE_ERROR_MESSAGE = 'Can\'t generate activation code for multiple device';
 
-
 // requests
 export const DEFAULT_DEVICE_PAGE_REQUEST: PageRequest = Object.freeze({
-  pageNumber: 0, pageSize: 7, sortByProperty: 'deviceName', sortByDirection: true, freeText: ''
+  pageNumber: 0, pageSize: 7, sortByProperty: 'deviceName', sortByDirection: true, freeText: '',
 });
 export const DEFAULT_GROUP_PARAM_REQUEST: GroupsPageRequest = {
-  'type': GroupType.DEVICE, activityState : 'ACTIVE', pageNumber: 0, pageSize: 5, sortByProperty: 'displayName', sortByDirection: true, freeText: '',
-}
+  type: GroupType.DEVICE, activityState : 'ACTIVE', pageNumber: 0, pageSize: 5, sortByProperty: 'displayName', sortByDirection: true, freeText: '',
+};
 export const DEFAULT_GDR_PAGE_REQUEST: PageRequest = Object.freeze({
-  pageNumber: 0, pageSize: 7, sortByProperty: 'name', sortByDirection: true, freeText: ''
+  pageNumber: 0, pageSize: 7, sortByProperty: 'name', sortByDirection: true, freeText: '',
 });
 
 // entity type
@@ -63,7 +61,7 @@ export const TYPE_DEVICE = 'DEVICE';
 export const TYPE_GROUP = 'GROUP';
 
 // table columns
-export const GROUP_TABLE_COLUMNS = [{param: 'groupId', name: 'groupId'}, {param: 'name', name: 'name'}]
+export const GROUP_TABLE_COLUMNS = [{param: 'groupId', name: 'groupId'}, {param: 'name', name: 'name'}];
 export const DEVICE_TABLE_COLUMNS = [
   {param: 'deviceId', name: 'deviceId'},
   {param: ['deviceState', 'status'], name: 'Status'},

@@ -9,7 +9,7 @@ export class FormService {
 
   constructor() { }
 
-  prepareForm(initData: any, type?: string): FormSupplier {
+  public prepareForm(initData: any, type?: string): FormSupplier {
     const formDataObj = {};
     const formProps = [];
     for (const prop of Object.keys(initData)) {

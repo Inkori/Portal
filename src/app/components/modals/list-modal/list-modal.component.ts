@@ -1,32 +1,32 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {DataType} from '../../../models/common';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {DataType} from '../../../models/common';
 
 @Component({
   selector: 'app-device-modal',
   templateUrl: './list-modal.component.html',
-  styleUrls: ['./list-modal.component.css']
+  styleUrls: ['./list-modal.component.css'],
 })
 export class ListModalComponent implements OnInit {
-  selectedIds = [];
-  dataSourceType: DataType;
+  public selectedIds = [];
+  public dataSourceType: DataType;
 
   constructor(private dialogRef: MatDialogRef<ListModalComponent>, @Inject(MAT_DIALOG_DATA) private data: any) {
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.dataSourceType = this.data.type;
   }
 
-  close() {
+  public close() {
     this.dialogRef.close();
   }
 
-  submit() {
+  public submit() {
     this.dialogRef.close(this.selectedIds);
   }
 
-  getIdList(idList: string[]) {
+  public getIdList(idList: string[]) {
     this.selectedIds = idList;
   }
 }

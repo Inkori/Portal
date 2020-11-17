@@ -1,9 +1,9 @@
-.activated:hover{
+.activated:hover {
   cursor: pointer;
   color: #2593dc;
 }
 
-.mat-column-selectDevice{
+.mat-column-selectDevice {
   flex: none;
   width: 50px;
   /*background-color: red;*/

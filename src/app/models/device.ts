@@ -1,27 +1,27 @@
 export class Device {
-  orgDeviceId: string;
-  deviceId: string;
-  deviceName: string;
-  deviceDisplayName: string;
-  deviceManufacturer: string;
-  deviceModelType: string;
-  deviceSerialnumber: string;
-  deviceFamily: string;
-  deviceEnclosureType: string;
-  deviceAuth: {};
-  orgId: string;
-  groupId: string;
-  groupName: string;
-  dateCreated: string;
-  dateModified: string;
-  deviceMetadata: DeviceMetadata;
-  deviceState: {
+  public orgDeviceId: string;
+  public deviceId: string;
+  public deviceName: string;
+  public deviceDisplayName: string;
+  public deviceManufacturer: string;
+  public deviceModelType: string;
+  public deviceSerialnumber: string;
+  public deviceFamily: string;
+  public deviceEnclosureType: string;
+  public deviceAuth: {};
+  public orgId: string;
+  public groupId: string;
+  public groupName: string;
+  public dateCreated: string;
+  public dateModified: string;
+  public deviceMetadata: DeviceMetadata;
+  public deviceState: {
     status: DeviceStatus | DeviceStatusCapitalize;
   };
-  deviceConfig: string;
-  subscriptionId: string;
-  groups: GroupsInDevice[];
-  licenseType?: unknown;
+  public deviceConfig: string;
+  public subscriptionId: string;
+  public groups: GroupsInDevice[];
+  public licenseType?: unknown;
 }
 
 interface DeviceMetadata {
@@ -54,7 +54,6 @@ export enum DeviceStatusCapitalize {
 }
 
 export class GroupsInDevice {
-  groupId: string;
-  groupName: string;
+  public groupId: string;
+  public groupName: string;
 }
-
