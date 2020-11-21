@@ -28,10 +28,7 @@ import {ChartsModule} from 'ng2-charts';
 import {initializer} from '../appInit';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {BarComponent} from './components/common/charts/bar/bar.component';
-import {LineComponent} from './components/common/charts/line/line.component';
-import {PieComponent} from './components/common/charts/pie/pie.component';
-import {RadarComponent} from './components/common/charts/radar/radar.component';
+import {ChartComponent} from './components/common/chart/chart.component';
 import {RealmSelectionComponent} from './components/common/realm-selection/realm-selection.component';
 import {SubscriptionBarComponent} from './components/common/subscription-bar/subscription-bar.component';
 import {TableComponent} from './components/common/table/table.component';
@@ -59,10 +56,7 @@ import {SubscriptionInterceptor} from './interseptors/auth-interseptor';
     TableComponent,
     ListModalComponent,
     InfoModalComponent,
-    PieComponent,
-    RadarComponent,
-    LineComponent,
-    BarComponent,
+    ChartComponent,
   ],
   imports: [
     HttpClientModule,

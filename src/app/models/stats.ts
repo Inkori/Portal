@@ -1,4 +1,5 @@
 import {Label, SingleDataSet} from 'ng2-charts';
+import {ChartDataSets, ChartType} from 'chart.js';
 
 export class UserStats {
   public authenticatedUserCount: number;
@@ -34,9 +35,18 @@ export class DevicesStat {
   public total: number;
 }
 
+export enum StatsDataType {
+  MEDIA,
+  APPS,
+  USER,
+  DEVICE
+}
+
 export class  StatsChartInfo {
   public title: string;
   public labels: Label[] = [];
-  public chartData: SingleDataSet = [];
+  public chartData: ChartDataSets[] = [];
   public total: number;
+  public chartType: ChartType;
+  public dataType: StatsDataType;
 }

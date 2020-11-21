@@ -77,6 +77,18 @@ export const GDR_TABLE_COLUMNS = [
   {param: 'enclosure', name: 'Enclosure type'},
   {param: 'family', name: 'Device Family'}];
 
+// charts
+export const CHART_TYPE_PIE = 'pie';
+export const CHART_TYPE_BAR = 'bar';
+export const USERS = 'Users';
+export const USERS_AUTHENTICATED = 'Authenticated';
+export const USERS_INVITED = 'Invited';
+export const DEVICES = 'Devices';
+export const APPS = 'Apps';
+export const APPS_INSTALLED = 'Installed';
+export const APPS_ADDED = 'Added';
+export const ASSETS = 'Media';
+
 // common
 export const MT_VR_S3 = 'VR-S3';
 export const ALERT_DANGER = 'alert-danger';
